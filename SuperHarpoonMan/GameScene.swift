@@ -8,34 +8,65 @@
 
 import SpriteKit
 
-class GameScene: SKScene {
+class GameScene: SKScene, SKPhysicsContactDelegate {
+    
+
+    enum ColliderType:UInt32
+    {
+        case Harpoon = 1
+        case Water = 2
+    }
+    
+    
     override func didMoveToView(view: SKView) {
         /* Setup your scene here */
-        let myLabel = SKLabelNode(fontNamed:"Chalkduster")
-        myLabel.text = "Hello, World!";
-        myLabel.fontSize = 65;
-        myLabel.position = CGPoint(x:CGRectGetMidX(self.frame), y:CGRectGetMidY(self.frame));
         
-        self.addChild(myLabel)
+            setupPhysics()
+
+
+    }
+    
+    func setupPhysics()
+    {
+        
+
+        
+        self.physicsWorld.contactDelegate = self
+        //self.physicsWorld.gravity = CGVector(dx: 0, dy: -5)
+        
+        
+        let harpoon = self.childNodeWithName("harpoon") as SKSpriteNode
+        harpoon.physicsBody = SKPhysicsBody(rectangleOfSize: harpoon.size)
+        harpoon.physicsBody!.affectedByGravity = true
+        harpoon.physicsBody!.allowsRotation = true
+        harpoon.physicsBody!.categoryBitMask = ColliderType.Harpoon.rawValue
+        harpoon.physicsBody!.contactTestBitMask = ColliderType.Water.rawValue
+        harpoon.physicsBody!.collisionBitMask = ColliderType.Water.rawValue
+        
+        let water = self.childNodeWithName("water") as SKSpriteNode
+        water.physicsBody = SKPhysicsBody(rectangleOfSize: water.size)
+        water.physicsBody!.affectedByGravity = false
+        water.physicsBody!.linearDamping = 0.5 //water viscosity
+        water.physicsBody!.categoryBitMask = ColliderType.Water.rawValue
+//        water.physicsBody!.contactTestBitMask = ColliderType.Harpoon.rawValue
+//        water.physicsBody!.collisionBitMask = ColliderType.Harpoon.rawValue
+        
+        
+    }
+    
+    func didBeginContact(contact: SKPhysicsContact) {
+        
+        if contact.bodyA.categoryBitMask == ColliderType.Harpoon.rawValue && contact.bodyB.categoryBitMask == ColliderType.Water.rawValue
+        {
+            println("The harpoon is in the water at \(contact.contactPoint)!")
+        }
     }
     
     override func touchesBegan(touches: NSSet, withEvent event: UIEvent) {
         /* Called when a touch begins */
         
         for touch: AnyObject in touches {
-            let location = touch.locationInNode(self)
-            
-            let sprite = SKSpriteNode(imageNamed:"Spaceship")
-            
-            sprite.xScale = 0.5
-            sprite.yScale = 0.5
-            sprite.position = location
-            
-            let action = SKAction.rotateByAngle(CGFloat(M_PI), duration:1)
-            
-            sprite.runAction(SKAction.repeatActionForever(action))
-            
-            self.addChild(sprite)
+
         }
     }
    
