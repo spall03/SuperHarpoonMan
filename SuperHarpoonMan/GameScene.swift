@@ -8,13 +8,15 @@
 
 import SpriteKit
 
-class GameScene: SKScene, SKPhysicsContactDelegate {
+class GameScene: SKScene, SKPhysicsContactDelegate, UIGestureRecognizerDelegate {
     
     var harpoon: SKSpriteNode!
     var harpoonTip: SKSpriteNode!
     var harpoonTail: SKSpriteNode!
     var water: SKSpriteNode!
 
+    var harpoonStart: CGPoint?
+    
     enum ColliderType:UInt32
     {
         case Harpoon = 1
@@ -31,6 +33,9 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         water = self.childNodeWithName("water") as SKSpriteNode
         setupPhysics()
 
+        let panGesture = UIPanGestureRecognizer( target: self, action:Selector("handlePan:") )
+        panGesture.delegate = self
+        view.addGestureRecognizer( panGesture )
 
     }
     
@@ -118,7 +123,39 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         //figure out the force vector
         
     }
-   
+
+    func handlePan(recognizer: UIPanGestureRecognizer)
+    {
+        if ( recognizer.state == UIGestureRecognizerState.Began )
+        {
+            var location = recognizer.locationInView( self.view )
+            location = self.convertPointFromView( location )
+            let dx = ( location.x - harpoonTip.position.x )
+            let dy = ( location.y - harpoonTip.position.y )
+            harpoonStart = CGPointMake( dx, dy )
+        }
+        else if ( recognizer.state == UIGestureRecognizerState.Ended )
+        {
+            var location = recognizer.locationInView( self.view )
+            location = self.convertPointFromView( location )
+            
+            var dx = location.x - harpoonTip.position.x;
+            var dy = location.y - harpoonTip.position.y;
+            
+            // Determine the direction to spin the node
+            let direction = ( harpoonStart!.x * dy - harpoonStart!.y * dx );
+            
+            dx = recognizer.velocityInView( self.view ).x
+            dy = recognizer.velocityInView( self.view ).y
+            
+            let speed = sqrt( dx*dx + dy*dy ) * 0.25
+            
+            // Apply angular impulse
+            harpoonTip.physicsBody!.applyAngularImpulse( speed * direction )
+        }
+        
+    }
+    
     override func update(currentTime: CFTimeInterval) {
         /* Called before each frame is rendered */
     }
