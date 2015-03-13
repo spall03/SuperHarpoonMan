@@ -37,6 +37,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         
         let harpoon = self.childNodeWithName("harpoon") as SKSpriteNode
         harpoon.physicsBody = SKPhysicsBody(rectangleOfSize: harpoon.size)
+        harpoon.physicsBody!.pinned = true
         harpoon.physicsBody!.affectedByGravity = true
         harpoon.physicsBody!.allowsRotation = true
         harpoon.physicsBody!.categoryBitMask = ColliderType.Harpoon.rawValue
@@ -44,12 +45,10 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         harpoon.physicsBody!.collisionBitMask = ColliderType.Water.rawValue
         
         let water = self.childNodeWithName("water") as SKSpriteNode
-        water.physicsBody = SKPhysicsBody(rectangleOfSize: water.size)
-        water.physicsBody!.affectedByGravity = false
-        water.physicsBody!.linearDamping = 0.5 //water viscosity
+        water.physicsBody = SKPhysicsBody(edgeLoopFromRect: water.frame)
         water.physicsBody!.categoryBitMask = ColliderType.Water.rawValue
-//        water.physicsBody!.contactTestBitMask = ColliderType.Harpoon.rawValue
-//        water.physicsBody!.collisionBitMask = ColliderType.Harpoon.rawValue
+        water.physicsBody!.contactTestBitMask = ColliderType.Harpoon.rawValue
+        water.physicsBody!.collisionBitMask = ColliderType.Harpoon.rawValue
         
         
     }
@@ -59,6 +58,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         if contact.bodyA.categoryBitMask == ColliderType.Harpoon.rawValue && contact.bodyB.categoryBitMask == ColliderType.Water.rawValue
         {
             println("The harpoon is in the water at \(contact.contactPoint)!")
+            contact.bodyA.linearDamping = 0.5 //water viscosity
         }
     }
     
