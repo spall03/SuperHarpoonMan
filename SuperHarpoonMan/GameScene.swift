@@ -8,13 +8,15 @@
 
 import SpriteKit
 
-class GameScene: SKScene, SKPhysicsContactDelegate {
+class GameScene: SKScene, SKPhysicsContactDelegate, UIGestureRecognizerDelegate {
     
     var harpoon: SKSpriteNode!
     var harpoonTip: SKSpriteNode!
     var harpoonTail: SKSpriteNode!
     var water: SKSpriteNode!
 
+    var harpoonStart: CGPoint?
+    
     enum ColliderType:UInt32
     {
         case Harpoon = 1
@@ -31,6 +33,9 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         water = self.childNodeWithName("water") as SKSpriteNode
         setupPhysics()
 
+        let panGesture = UIPanGestureRecognizer( target: self, action:Selector("handlePan:") )
+        panGesture.delegate = self
+        view.addGestureRecognizer( panGesture )
 
     }
     
@@ -51,7 +56,9 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         harpoon.physicsBody!.pinned = false
         harpoon.physicsBody!.affectedByGravity = true
         harpoon.physicsBody!.allowsRotation = true
-        
+        // TODO: I added (well, removed) friction from the harpoon to get the biggest effect I could
+        harpoon.physicsBody!.friction = 0.0
+
         let harpoonRotationJoint = SKPhysicsJointPin.jointWithBodyA(harpoonTail.physicsBody, bodyB: harpoon.physicsBody, anchor: harpoonTail.position)
         self.physicsWorld.addJoint(harpoonRotationJoint)
         
@@ -59,6 +66,8 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         harpoonTip.physicsBody!.pinned = false
         harpoonTip.physicsBody!.affectedByGravity = true
         harpoonTip.physicsBody!.allowsRotation = true
+        // TODO: I added (well, removed) friction to get the biggest effect I could
+        harpoonTip.physicsBody!.friction = 0.0
         
         let harpoonTipJoint = SKPhysicsJointFixed.jointWithBodyA(harpoon.physicsBody, bodyB: harpoonTip.physicsBody, anchor: harpoonTip.position)
         self.physicsWorld.addJoint(harpoonTipJoint)
@@ -100,20 +109,53 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     
     func throwHarpoon(touch: CGPoint)
     {
-        
-        harpoonTip.physicsBody!.applyForce(CGVector(dx: 300.0, dy: 110.0))
 
+        // TODO: So I can get the harpoon swaying to the beat if I do this:
+        harpoonTip.physicsBody!.applyForce(CGVector(dx: 300.0, dy: 110.0))
+        // TODO: So if you only want to move the harpoonTip you don't need to set the friction on the
+        // harpoon to 0.0, as well, just the friction on the harpoonTip
+
+        // TODO: or if I do this:
+        // harpoon.physicsBody!.applyForce(CGVector(dx: 300.0, dy: 110.0))
         
         //harpoon.physicsBody!.pinned = false
         
         //figure out the force vector
         
-        
-        
-        
+    }
+
+    func handlePan(recognizer: UIPanGestureRecognizer)
+    {
+        if ( recognizer.state == UIGestureRecognizerState.Began )
+        {
+            var location = recognizer.locationInView( self.view )
+            location = self.convertPointFromView( location )
+            let dx = ( location.x - harpoonTip.position.x )
+            let dy = ( location.y - harpoonTip.position.y )
+            harpoonStart = CGPointMake( dx, dy )
+        }
+        else if ( recognizer.state == UIGestureRecognizerState.Ended )
+        {
+            var location = recognizer.locationInView( self.view )
+            location = self.convertPointFromView( location )
+            
+            var dx = location.x - harpoonTip.position.x;
+            var dy = location.y - harpoonTip.position.y;
+            
+            // Determine the direction to spin the node
+            let direction = ( harpoonStart!.x * dy - harpoonStart!.y * dx );
+            
+            dx = recognizer.velocityInView( self.view ).x
+            dy = recognizer.velocityInView( self.view ).y
+            
+            let speed = sqrt( dx*dx + dy*dy ) * 0.25
+            
+            // Apply angular impulse
+            harpoonTip.physicsBody!.applyAngularImpulse( speed * direction )
+        }
         
     }
-   
+    
     override func update(currentTime: CFTimeInterval) {
         /* Called before each frame is rendered */
     }
