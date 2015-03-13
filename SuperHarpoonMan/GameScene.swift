@@ -51,7 +51,9 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         harpoon.physicsBody!.pinned = false
         harpoon.physicsBody!.affectedByGravity = true
         harpoon.physicsBody!.allowsRotation = true
-        
+        // TODO: I added (well, removed) friction from the harpoon to get the biggest effect I could
+        harpoon.physicsBody!.friction = 0.0
+
         let harpoonRotationJoint = SKPhysicsJointPin.jointWithBodyA(harpoonTail.physicsBody, bodyB: harpoon.physicsBody, anchor: harpoonTail.position)
         self.physicsWorld.addJoint(harpoonRotationJoint)
         
@@ -59,6 +61,8 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         harpoonTip.physicsBody!.pinned = false
         harpoonTip.physicsBody!.affectedByGravity = true
         harpoonTip.physicsBody!.allowsRotation = true
+        // TODO: I added (well, removed) friction to get the biggest effect I could
+        harpoonTip.physicsBody!.friction = 0.0
         
         let harpoonTipJoint = SKPhysicsJointFixed.jointWithBodyA(harpoon.physicsBody, bodyB: harpoonTip.physicsBody, anchor: harpoonTip.position)
         self.physicsWorld.addJoint(harpoonTipJoint)
@@ -100,17 +104,18 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     
     func throwHarpoon(touch: CGPoint)
     {
-        
-        harpoonTip.physicsBody!.applyForce(CGVector(dx: 300.0, dy: 110.0))
 
+        // TODO: So I can get the harpoon swaying to the beat if I do this:
+        harpoonTip.physicsBody!.applyForce(CGVector(dx: 300.0, dy: 110.0))
+        // TODO: So if you only want to move the harpoonTip you don't need to set the friction on the
+        // harpoon to 0.0, as well, just the friction on the harpoonTip
+
+        // TODO: or if I do this:
+        // harpoon.physicsBody!.applyForce(CGVector(dx: 300.0, dy: 110.0))
         
         //harpoon.physicsBody!.pinned = false
         
         //figure out the force vector
-        
-        
-        
-        
         
     }
    
