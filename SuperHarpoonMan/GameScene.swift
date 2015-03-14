@@ -9,10 +9,13 @@
 import SpriteKit
 
 class GameScene: SKScene, SKPhysicsContactDelegate, UIGestureRecognizerDelegate {
-    
-    var harpoon: SKSpriteNode!
-    var harpoonTip: SKSpriteNode!
+
+    var crosshairs: SKSpriteNode!
+
     var harpoonTail: SKSpriteNode!
+    var harpoonBody: SKSpriteNode!
+    var harpoonTip: SKSpriteNode!
+
     var water: SKSpriteNode!
 
     var harpoonStart: CGPoint?
@@ -27,12 +30,23 @@ class GameScene: SKScene, SKPhysicsContactDelegate, UIGestureRecognizerDelegate 
     override func didMoveToView(view: SKView) {
         /* Setup your scene here */
         
-        harpoon = self.childNodeWithName("harpoon") as SKSpriteNode
-        harpoonTip = self.childNodeWithName("harpoonTip") as SKSpriteNode
+        //build crosshairs
+        crosshairs = self.childNodeWithName("crosshairs") as SKSpriteNode
+        
+        //build the harpoon
         harpoonTail = self.childNodeWithName("harpoonTail") as SKSpriteNode
+        harpoonBody =  harpoonTail.childNodeWithName("harpoonBody") as SKSpriteNode
+        harpoonTip = harpoonBody.childNodeWithName("harpoonTip") as SKSpriteNode
+        
+
+
+        
+        //add water
         water = self.childNodeWithName("water") as SKSpriteNode
+        
         setupPhysics()
 
+        //add gesture recognizer
         let panGesture = UIPanGestureRecognizer( target: self, action:Selector("handlePan:") )
         panGesture.delegate = self
         view.addGestureRecognizer( panGesture )
@@ -48,33 +62,32 @@ class GameScene: SKScene, SKPhysicsContactDelegate, UIGestureRecognizerDelegate 
         
         harpoonTail.physicsBody = SKPhysicsBody(rectangleOfSize: harpoonTail.size)
         harpoonTail.physicsBody!.pinned = true
-        harpoonTail.physicsBody!.affectedByGravity = false
+        harpoonTail.physicsBody!.affectedByGravity = true
         harpoonTail.physicsBody!.allowsRotation = true
-        harpoonTail.physicsBody!.mass = 1000.0
+        harpoonTail.physicsBody!.friction = 0.0
+        harpoonTail.physicsBody!.mass = 10.0
         
-        harpoon.physicsBody = SKPhysicsBody(rectangleOfSize: harpoon.size)
-        harpoon.physicsBody!.pinned = false
-        harpoon.physicsBody!.affectedByGravity = true
-        harpoon.physicsBody!.allowsRotation = true
-        // TODO: I added (well, removed) friction from the harpoon to get the biggest effect I could
-        harpoon.physicsBody!.friction = 0.0
+        
+        
+        harpoonBody.physicsBody = SKPhysicsBody(rectangleOfSize: harpoonBody.size)
+        harpoonBody.physicsBody!.pinned = true
+        harpoonBody.physicsBody!.affectedByGravity = true
+        harpoonBody.physicsBody!.allowsRotation = false
+        harpoonBody.physicsBody!.friction = 0.0
+        harpoonBody.physicsBody!.mass = 100.0
 
-        let harpoonRotationJoint = SKPhysicsJointPin.jointWithBodyA(harpoonTail.physicsBody, bodyB: harpoon.physicsBody, anchor: harpoonTail.position)
-        self.physicsWorld.addJoint(harpoonRotationJoint)
         
         harpoonTip.physicsBody = SKPhysicsBody(rectangleOfSize: harpoonTip.size)
-        harpoonTip.physicsBody!.pinned = false
+        harpoonTip.physicsBody!.pinned = true
         harpoonTip.physicsBody!.affectedByGravity = true
-        harpoonTip.physicsBody!.allowsRotation = true
-        // TODO: I added (well, removed) friction to get the biggest effect I could
+        harpoonTip.physicsBody!.allowsRotation = false
         harpoonTip.physicsBody!.friction = 0.0
+        harpoonTip.physicsBody!.mass = 0.0
+
         
-        let harpoonTipJoint = SKPhysicsJointFixed.jointWithBodyA(harpoon.physicsBody, bodyB: harpoonTip.physicsBody, anchor: harpoonTip.position)
-        self.physicsWorld.addJoint(harpoonTipJoint)
-        
-        harpoon.physicsBody!.categoryBitMask = ColliderType.Harpoon.rawValue
-        harpoon.physicsBody!.contactTestBitMask = ColliderType.Water.rawValue
-        harpoon.physicsBody!.collisionBitMask = ColliderType.Water.rawValue
+        harpoonTip.physicsBody!.categoryBitMask = ColliderType.Harpoon.rawValue
+        harpoonTip.physicsBody!.contactTestBitMask = ColliderType.Water.rawValue
+        harpoonTip.physicsBody!.collisionBitMask = ColliderType.Water.rawValue
         
 
         
@@ -100,9 +113,9 @@ class GameScene: SKScene, SKPhysicsContactDelegate, UIGestureRecognizerDelegate 
         
         for touch: AnyObject in touches {
             
-            let controlPoint = touch.locationInView(self.view)
-            println("user touched here: \(controlPoint)")
-            throwHarpoon(controlPoint)
+//            let controlPoint = touch.locationInView(self.view)
+//            println("user touched here: \(controlPoint)")
+            //throwHarpoon(controlPoint)
 
         }
     }
@@ -111,7 +124,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate, UIGestureRecognizerDelegate 
     {
 
         // TODO: So I can get the harpoon swaying to the beat if I do this:
-        harpoonTip.physicsBody!.applyForce(CGVector(dx: 300.0, dy: 110.0))
+        //harpoonTip.physicsBody!.applyForce(CGVector(dx: 300.0, dy: 110.0))
         // TODO: So if you only want to move the harpoonTip you don't need to set the friction on the
         // harpoon to 0.0, as well, just the friction on the harpoonTip
 
@@ -123,18 +136,63 @@ class GameScene: SKScene, SKPhysicsContactDelegate, UIGestureRecognizerDelegate 
         //figure out the force vector
         
     }
+    
+    func getAngle (harpoonTail: CGPoint, crosshairs: CGPoint) -> CGFloat
+    {
+        let dx = harpoonTail.x - crosshairs.x
+        let dy = harpoonTail.y - crosshairs.y
+        
+        return atan2(dy, dx)
+    }
+    
+    func adjustHarpoonAngle (angle: CGFloat)
+    {
+        
+        //let degrees = (angle * (180 / CGFloat(M_PI))) - 90
+        
+        let newAngle = angle - (CGFloat(M_PI) / 2)
+        
+        println(newAngle)
+        
+        
+        
+        let harpoonSpin = SKAction.rotateByAngle(newAngle, duration: 0.01)
+        harpoonTail.runAction(harpoonSpin)
+        
+    }
+    
+
 
     func handlePan(recognizer: UIPanGestureRecognizer)
     {
-        if ( recognizer.state == UIGestureRecognizerState.Began )
+        
+        var angle: CGFloat
+        
+        if ( recognizer.state == UIGestureRecognizerState.Began || recognizer.state == UIGestureRecognizerState.Changed)
         {
-            var location = recognizer.locationInView( self.view )
-            location = self.convertPointFromView( location )
-            let dx = ( location.x - harpoonTip.position.x )
-            let dy = ( location.y - harpoonTip.position.y )
-            harpoonStart = CGPointMake( dx, dy )
+
+            
+            crosshairs.position = self.convertPointFromView(recognizer.locationInView(self.view))
+            
+            angle = getAngle(harpoonTail.position, crosshairs: crosshairs.position)
+            
+            //println(angle)
+            
+            adjustHarpoonAngle(angle)
+            
+            
+            
+
         }
-        else if ( recognizer.state == UIGestureRecognizerState.Ended )
+//        else if (recognizer.state == UIGestureRecognizerState.Changed)
+//        {
+//            crosshairs.position = self.convertPointFromView(recognizer.locationInView(self.view))
+//            
+//             println(getAngle(harpoonTail.position, crosshairs: crosshairs.position))
+//            
+//        }
+        
+        else if (recognizer.state == UIGestureRecognizerState.Ended)
         {
             var location = recognizer.locationInView( self.view )
             location = self.convertPointFromView( location )
@@ -143,15 +201,18 @@ class GameScene: SKScene, SKPhysicsContactDelegate, UIGestureRecognizerDelegate 
             var dy = location.y - harpoonTip.position.y;
             
             // Determine the direction to spin the node
-            let direction = ( harpoonStart!.x * dy - harpoonStart!.y * dx );
+            //let direction = ( harpoonStart!.x * dy - harpoonStart!.y * dx );
             
             dx = recognizer.velocityInView( self.view ).x
             dy = recognizer.velocityInView( self.view ).y
             
-            let speed = sqrt( dx*dx + dy*dy ) * 0.25
+            //let speed = sqrt( dx*dx + dy*dy ) * 0.25
             
-            // Apply angular impulse
-            harpoonTip.physicsBody!.applyAngularImpulse( speed * direction )
+             //Apply impulse
+//            let vector = CGVector(dx: dx * 0.1, dy: dy * 0.1)
+//            
+//            harpoonBody.physicsBody!.pinned = false
+//            harpoonBody.physicsBody!.applyImpulse(vector)
         }
         
     }
