@@ -20,24 +20,31 @@ struct PhysicsCategory {
 
 class GameScene: SKScene, SKPhysicsContactDelegate, UIGestureRecognizerDelegate {
 
+
     var crosshairs: SKSpriteNode!
     
     var harpoon: Harpoon!
+    var harpoonsLeft: Int = 0
+    var score: Int = 0
 
     var water: SKSpriteNode!
     
     var leftsky: SKSpriteNode!
     var rightsky: SKSpriteNode!
+    
+    var harpoonLabel: SKLabelNode!
+    var scoreLabel: SKLabelNode!
 
 
     override func didMoveToView(view: SKView) {
         
+        
         //build crosshairs
         crosshairs = self.childNodeWithName("crosshairs") as SKSpriteNode
         
-        //build the harpoon
+        //build the harpoon and add initial harpoon count
         createNewHarpoon()
-        
+        harpoonsLeft = 99
         
         //add water
         water = self.childNodeWithName("water") as SKSpriteNode
@@ -48,12 +55,28 @@ class GameScene: SKScene, SKPhysicsContactDelegate, UIGestureRecognizerDelegate 
         
         //setup scene physics
         setupPhysics()
+        
+        //setup labels
+        setupLabels()
 
         //add gesture recognizer
         let panGesture = UIPanGestureRecognizer( target: self, action:Selector("handlePan:") )
         panGesture.delegate = self
         view.addGestureRecognizer( panGesture )
 
+    }
+    
+    func setupLabels()
+    {
+        harpoonLabel = SKLabelNode(text: "Harpoons: \(harpoonsLeft)")
+        scoreLabel = SKLabelNode(text: "Score: \(score)")
+        
+        harpoonLabel.position = CGPointMake(510.0, 725.0)
+        harpoonLabel.fontName = "Chalkduster"
+        harpoonLabel.fontSize = 18
+        
+        self.addChild(harpoonLabel)
+        
     }
     
     func createNewHarpoon()
@@ -67,6 +90,8 @@ class GameScene: SKScene, SKPhysicsContactDelegate, UIGestureRecognizerDelegate 
     {
         harpoon.physicsBody = nil
         harpoon.removeFromParent()
+        harpoonsLeft -= 1
+        harpoonLabel.text = "Harpoons: \(harpoonsLeft)"
     }
     
     func setupPhysics()
@@ -239,4 +264,5 @@ class GameScene: SKScene, SKPhysicsContactDelegate, UIGestureRecognizerDelegate 
     override func update(currentTime: CFTimeInterval) {
         /* Called before each frame is rendered */
     }
+    
 }
