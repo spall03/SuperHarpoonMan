@@ -6,19 +6,15 @@
 	<false/>
 	<key>IDESourceControlProjectIdentifier</key>
 	<string>FECEAC75-01EE-4551-BEEA-B473861967B1</string>
-	<key>IDESourceControlProjectName</key>
-	<string>SuperHarpoonMan</string>
 	<key>IDESourceControlProjectOriginsDictionary</key>
 	<dict>
 		<key>471D32A8FACE3A794C9EFE21CBC2FC14422F2E82</key>
 		<string>https://github.com/spall03/SuperHarpoonMan.git</string>
 	</dict>
-	<key>IDESourceControlProjectPath</key>
-	<string>SuperHarpoonMan.xcodeproj</string>
 	<key>IDESourceControlProjectRelativeInstallPathDictionary</key>
 	<dict>
 		<key>471D32A8FACE3A794C9EFE21CBC2FC14422F2E82</key>
-		<string>../..</string>
+		<string>SuperHarpoonMan/</string>
 	</dict>
 	<key>IDESourceControlProjectURL</key>
 	<string>https://github.com/spall03/SuperHarpoonMan.git</string>
