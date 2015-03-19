@@ -16,6 +16,7 @@ struct PhysicsCategory {
     static let Water     : UInt32 = 0b11      // 3
     static let Sky       : UInt32 = 0b100     // 4
     static let Fish      : UInt32 = 0b101     // 5
+    static let WaterEdge : UInt32 = 0b110     // 6
 }
 
 
@@ -32,6 +33,8 @@ class GameScene: SKScene, SKPhysicsContactDelegate, UIGestureRecognizerDelegate 
     
     var leftsky: SKSpriteNode!
     var rightsky: SKSpriteNode!
+    
+    var waterSides: SKNode!
     
     var harpoonLabel: SKLabelNode!
     var scoreLabel: SKLabelNode!
@@ -52,6 +55,9 @@ class GameScene: SKScene, SKPhysicsContactDelegate, UIGestureRecognizerDelegate 
         
         //add water
         water = self.childNodeWithName("water") as SKSpriteNode
+        
+        waterSides = SKNode()
+        self.addChild(waterSides)
         
         //add sky borders
         leftsky = self.childNodeWithName("leftsky") as SKSpriteNode
@@ -126,8 +132,14 @@ class GameScene: SKScene, SKPhysicsContactDelegate, UIGestureRecognizerDelegate 
         water.physicsBody = SKPhysicsBody(rectangleOfSize: water.size)
         water.physicsBody!.dynamic = false
         water.physicsBody!.categoryBitMask = PhysicsCategory.Water
-        water.physicsBody!.contactTestBitMask = PhysicsCategory.Harpoon
+        water.physicsBody!.contactTestBitMask = PhysicsCategory.Harpoon | PhysicsCategory.Fish
         water.physicsBody!.collisionBitMask = PhysicsCategory.None
+        
+        waterSides.physicsBody = SKPhysicsBody(edgeLoopFromRect: self.view!.frame)
+        println(self.view!.frame)
+        waterSides.physicsBody!.categoryBitMask = PhysicsCategory.WaterEdge
+        waterSides.physicsBody!.contactTestBitMask = PhysicsCategory.Fish
+        waterSides.physicsBody!.collisionBitMask = PhysicsCategory.None
         
         leftsky.physicsBody = SKPhysicsBody(rectangleOfSize: leftsky.size)
         leftsky.physicsBody!.dynamic = false
@@ -162,7 +174,13 @@ class GameScene: SKScene, SKPhysicsContactDelegate, UIGestureRecognizerDelegate 
             
         }
         
-
+        if (contact.bodyA.categoryBitMask == PhysicsCategory.Fish) && (contact.bodyB.categoryBitMask == PhysicsCategory.WaterEdge)
+        {
+            println("Fish hit side of screen!")
+            
+        }
+        
+  
     }
     
     func didEndContact(contact: SKPhysicsContact) {
@@ -179,6 +197,12 @@ class GameScene: SKScene, SKPhysicsContactDelegate, UIGestureRecognizerDelegate 
             
             killHarpoon()
             createNewHarpoon()
+        }
+        
+        if (contact.bodyA.categoryBitMask == PhysicsCategory.Fish) && (contact.bodyB.categoryBitMask == PhysicsCategory.Water)
+        {
+            println("Fish out of water!")
+            
         }
 
         

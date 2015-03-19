@@ -58,7 +58,7 @@ class Fish: SKSpriteNode
         //set up fish collision detection
         self.physicsBody!.categoryBitMask = PhysicsCategory.Fish
         self.physicsBody!.collisionBitMask = PhysicsCategory.None
-        self.physicsBody!.contactTestBitMask = PhysicsCategory.HarpoonTip
+        self.physicsBody!.contactTestBitMask = PhysicsCategory.HarpoonTip | PhysicsCategory.Water
         
         
     }
