@@ -16,6 +16,7 @@
 		C69A2C251AB22BC30098F885 /* LaunchScreen.xib in Resources */ = {isa = PBXBuildFile; fileRef = C69A2C231AB22BC30098F885 /* LaunchScreen.xib */; };
 		C69A2C311AB22BC30098F885 /* SuperHarpoonManTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = C69A2C301AB22BC30098F885 /* SuperHarpoonManTests.swift */; };
 		C6FA9E311AB8D13200656890 /* Harpoon.swift in Sources */ = {isa = PBXBuildFile; fileRef = C6FA9E301AB8D13200656890 /* Harpoon.swift */; };
+		C6FA9E331ABA119700656890 /* Fish.swift in Sources */ = {isa = PBXBuildFile; fileRef = C6FA9E321ABA119700656890 /* Fish.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -42,6 +43,7 @@
 		C69A2C2F1AB22BC30098F885 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		C69A2C301AB22BC30098F885 /* SuperHarpoonManTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SuperHarpoonManTests.swift; sourceTree = "<group>"; };
 		C6FA9E301AB8D13200656890 /* Harpoon.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Harpoon.swift; sourceTree = "<group>"; };
+		C6FA9E321ABA119700656890 /* Fish.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Fish.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -85,6 +87,7 @@
 			children = (
 				C69A2C161AB22BC20098F885 /* AppDelegate.swift */,
 				C6FA9E301AB8D13200656890 /* Harpoon.swift */,
+				C6FA9E321ABA119700656890 /* Fish.swift */,
 				C69A2C181AB22BC20098F885 /* GameScene.sks */,
 				C69A2C1A1AB22BC20098F885 /* GameScene.swift */,
 				C69A2C1C1AB22BC20098F885 /* GameViewController.swift */,
@@ -222,6 +225,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				C6FA9E331ABA119700656890 /* Fish.swift in Sources */,
 				C69A2C1B1AB22BC20098F885 /* GameScene.swift in Sources */,
 				C69A2C1D1AB22BC20098F885 /* GameViewController.swift in Sources */,
 				C69A2C171AB22BC20098F885 /* AppDelegate.swift in Sources */,

@@ -15,6 +15,7 @@ struct PhysicsCategory {
     static let Harpoon   : UInt32 = 0b10      // 2
     static let Water     : UInt32 = 0b11      // 3
     static let Sky       : UInt32 = 0b100     // 4
+    static let Fish      : UInt32 = 0b101     // 5
 }
 
 
@@ -34,6 +35,9 @@ class GameScene: SKScene, SKPhysicsContactDelegate, UIGestureRecognizerDelegate 
     
     var harpoonLabel: SKLabelNode!
     var scoreLabel: SKLabelNode!
+    
+    var fishArray: [Fish!] = []
+    var numberOfFish: Int = 1
 
 
     override func didMoveToView(view: SKView) {
@@ -53,17 +57,37 @@ class GameScene: SKScene, SKPhysicsContactDelegate, UIGestureRecognizerDelegate 
         leftsky = self.childNodeWithName("leftsky") as SKSpriteNode
         rightsky = self.childNodeWithName("rightsky") as SKSpriteNode
         
-        //setup scene physics
-        setupPhysics()
-        
         //setup labels
         setupLabels()
+        
+        //add fish
+        addFish(numberOfFish)
+        
+        //setup scene physics
+        setupPhysics()
 
         //add gesture recognizer
         let panGesture = UIPanGestureRecognizer( target: self, action:Selector("handlePan:") )
         panGesture.delegate = self
         view.addGestureRecognizer( panGesture )
 
+    }
+    
+    func addFish(numberOfFish:Int)
+    {
+        
+        for var i = 0; i < numberOfFish; i++
+        {
+            let newFish = Fish(texture: nil, color: UIColor.grayColor(), size: CGSizeMake(10.0, 5.0))
+            water.addChild(newFish)
+            newFish.setupFish()
+            newFish.moveFish()
+            
+            
+            self.fishArray.append(newFish)
+        }
+        
+        
     }
     
     func setupLabels()
@@ -121,58 +145,40 @@ class GameScene: SKScene, SKPhysicsContactDelegate, UIGestureRecognizerDelegate 
     }
     
     func didBeginContact(contact: SKPhysicsContact) {
+
         
-        var firstBody: SKPhysicsBody
-        var secondBody: SKPhysicsBody
-        if contact.bodyA.categoryBitMask < contact.bodyB.categoryBitMask {
-            firstBody = contact.bodyA
-            secondBody = contact.bodyB
-        } else {
-            firstBody = contact.bodyB
-            secondBody = contact.bodyA
-        }
-        
-        if ((firstBody.categoryBitMask & PhysicsCategory.Harpoon != 0) &&
-            (secondBody.categoryBitMask & PhysicsCategory.Water != 0))
+        if (contact.bodyA.categoryBitMask == PhysicsCategory.Harpoon) && (contact.bodyB.categoryBitMask == PhysicsCategory.Water)
         {
-                println("harpoon is in the water!")
-                firstBody.linearDamping = 9.0
+            println("harpoon is in the water!")
+            contact.bodyA.linearDamping = 9.0
+            
+            
         }
+        
+        if (contact.bodyA.categoryBitMask == PhysicsCategory.HarpoonTip) && (contact.bodyB.categoryBitMask == PhysicsCategory.Fish)
+        {
+            println("you hit a fish!")
+            
+            
+        }
+        
+
     }
     
     func didEndContact(contact: SKPhysicsContact) {
         
-        var firstBody: SKPhysicsBody
-        var secondBody: SKPhysicsBody
-        if contact.bodyA.categoryBitMask < contact.bodyB.categoryBitMask {
-            firstBody = contact.bodyA
-            secondBody = contact.bodyB
-        } else {
-            firstBody = contact.bodyB
-            secondBody = contact.bodyA
+        
+        if (contact.bodyA.categoryBitMask == PhysicsCategory.HarpoonTip) && (contact.bodyB.categoryBitMask == PhysicsCategory.Fish)
+        {
+            println("harpoon has speared a fish!")
         }
         
-        
-        //harpoon exits screen through the water
-        if ((firstBody.categoryBitMask & PhysicsCategory.Harpoon != 0) &&
-            (secondBody.categoryBitMask & PhysicsCategory.Water != 0))
+        if (contact.bodyA.categoryBitMask == PhysicsCategory.Harpoon) && (contact.bodyB.categoryBitMask == PhysicsCategory.Water || contact.bodyB.categoryBitMask == PhysicsCategory.Sky)
         {
             println("harpoon has left the screen!")
             
             killHarpoon()
             createNewHarpoon()
-            
-        }
-        
-        //harpoon exits screen through the air
-        if ((firstBody.categoryBitMask & PhysicsCategory.Harpoon != 0) &&
-            (secondBody.categoryBitMask & PhysicsCategory.Sky != 0))
-        {
-            println("harpoon has left the screen!")
-            
-            killHarpoon()
-            createNewHarpoon()
-            
         }
 
         
@@ -263,6 +269,19 @@ class GameScene: SKScene, SKPhysicsContactDelegate, UIGestureRecognizerDelegate 
     
     override func update(currentTime: CFTimeInterval) {
         /* Called before each frame is rendered */
+        
+//        for fish in fishArray
+//        {
+//            
+//            if fish.physicsBody!.resting
+//            {
+//                fish.moveFish()
+//                
+//            }
+//            
+//            
+//        }
+        
     }
     
 }
