@@ -40,7 +40,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate, UIGestureRecognizerDelegate 
     var scoreLabel: SKLabelNode!
     
     var fishArray: [Fish!] = []
-    var numberOfFish: Int = 1
+    var numberOfFish: Int = 5
 
 
     override func didMoveToView(view: SKView) {
@@ -84,7 +84,19 @@ class GameScene: SKScene, SKPhysicsContactDelegate, UIGestureRecognizerDelegate 
         
         for var i = 0; i < numberOfFish; i++
         {
-            let newFish = Fish(texture: nil, color: UIColor.grayColor(), size: CGSizeMake(10.0, 5.0))
+            
+            var newFish: Fish!
+            
+            var r = randomInt(1, upper: 2)
+            
+            if r == 1
+            {
+              newFish = RedFish()
+            }
+            else
+            {
+              newFish = BlueFish()
+            }
             water.addChild(newFish)
             newFish.setupFish()
             newFish.moveFish()
@@ -306,6 +318,18 @@ class GameScene: SKScene, SKPhysicsContactDelegate, UIGestureRecognizerDelegate 
 //            
 //        }
         
+    }
+    
+    func randomInt (lower: Int , upper: Int) -> Int {
+        return lower + Int(arc4random_uniform(upper - lower + 1))
+    }
+    
+    func random() -> CGFloat {
+        return CGFloat(Float(arc4random()) / 0xFFFFFFFF)
+    }
+    
+    func random(min: CGFloat, max: CGFloat) -> CGFloat {
+        return random() * (max - min) + min
     }
     
 }

@@ -15,6 +15,16 @@ class Fish: SKSpriteNode
     var pointValue: Int = 0
     var swimVector: CGVector!
     
+    var startingDepthMax: CGFloat!
+    var startingDepthMin: CGFloat!
+    
+    var horizontalMaxVector: CGFloat!
+    var verticalMaxVector: CGFloat!
+    var minVectorDuration: CGFloat!
+    var maxVectorDuration: CGFloat!
+    var minPauseDuration: CGFloat!
+    var maxPauseDuration: CGFloat!
+    
     var horizontalRange: SKRange!
     var verticalRange: SKRange!
     
@@ -38,8 +48,8 @@ class Fish: SKSpriteNode
 //        self.position.x = random(min: self.size.width, max: parent!.frame.size.width - self.size.width)
 //        self.position.y = random(min: self.size.height, max: parent!.frame.size.height - self.size.height)
         
-        self.position.x = random(min: -20, max: 20)
-        self.position.y = random(min: -20, max: 20)
+        self.position.x = random(-20, max: 20)
+        self.position.y = random(startingDepthMin, max: startingDepthMax)
         
         //define the fish's movement range
 //        horizontalRange = SKRange(lowerLimit: water.frame.minX, upperLimit: water.frame.maxX)
@@ -65,16 +75,16 @@ class Fish: SKSpriteNode
     
     func moveFish()
     {
-        var duration = NSTimeInterval(random(min: 2.0, max: 5.0))
-        var dx = random(min: -20.0, max: 20.0)
-        var dy = random(min: -20.0, max: 20.0)
+        var duration = NSTimeInterval(random(minVectorDuration, max: maxVectorDuration))
+        var dx = random(-horizontalMaxVector, max: horizontalMaxVector)
+        var dy = random(-verticalMaxVector, max: verticalMaxVector)
         
         swimVector = CGVector(dx: dx, dy: dy) //keep track of the fish's vector so we can change it if it bangs into the side of the water
         
         var movement = SKAction.moveBy(swimVector, duration: duration)
         
         self.runAction(movement, completion: { () -> Void in
-            var wait = SKAction.waitForDuration(NSTimeInterval(self.random(min: 1.0, max: 5.0)))
+            var wait = SKAction.waitForDuration(NSTimeInterval(self.random(self.minPauseDuration, max: self.maxPauseDuration)))
             
             self.runAction(wait, completion: { () -> Void in
                 self.moveFish()
@@ -93,16 +103,21 @@ class Fish: SKSpriteNode
         
     }
     
+
+    required init?(coder aDecoder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+    
+    func randomInt (lower: Int , upper: Int) -> Int {
+        return lower + Int(arc4random_uniform(upper - lower + 1))
+    }
+    
     func random() -> CGFloat {
         return CGFloat(Float(arc4random()) / 0xFFFFFFFF)
     }
     
-    func random(#min: CGFloat, max: CGFloat) -> CGFloat {
+    func random(min: CGFloat, max: CGFloat) -> CGFloat {
         return random() * (max - min) + min
-    }
-
-    required init?(coder aDecoder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
     }
     
     
