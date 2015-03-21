@@ -117,8 +117,19 @@ class GameScene: SKScene, SKPhysicsContactDelegate, UIGestureRecognizerDelegate 
         harpoonLabel.fontName = "Chalkduster"
         harpoonLabel.fontSize = 18
         
-        self.addChild(harpoonLabel)
+        scoreLabel.position = CGPointMake(510.0, 710.0)
+        scoreLabel.fontName = "Chalkduster"
+        scoreLabel.fontSize = 14
         
+        self.addChild(harpoonLabel)
+        self.addChild(scoreLabel)
+        
+    }
+    
+    func updateLabels()
+    {
+        harpoonLabel.text = "Harpoons: \(harpoonsLeft)"
+        scoreLabel.text = "Score: \(score)"
     }
     
     func createNewHarpoon()
@@ -133,7 +144,8 @@ class GameScene: SKScene, SKPhysicsContactDelegate, UIGestureRecognizerDelegate 
         harpoon.physicsBody = nil
         harpoon.removeFromParent()
         harpoonsLeft -= 1
-        harpoonLabel.text = "Harpoons: \(harpoonsLeft)"
+        updateLabels()
+       
     }
     
     func setupPhysics()
@@ -195,12 +207,22 @@ class GameScene: SKScene, SKPhysicsContactDelegate, UIGestureRecognizerDelegate 
   
     }
     
+    func fishHit (contact: SKPhysicsContact)
+    {
+        var deadFish = contact.bodyB.node as Fish
+        score += deadFish.killFish()
+        updateLabels()
+        
+    }
+    
     func didEndContact(contact: SKPhysicsContact) {
         
         
         if (contact.bodyA.categoryBitMask == PhysicsCategory.HarpoonTip) && (contact.bodyB.categoryBitMask == PhysicsCategory.Fish)
         {
             println("harpoon has speared a fish!")
+            fishHit(contact)
+            
         }
         
         if (contact.bodyA.categoryBitMask == PhysicsCategory.Harpoon) && (contact.bodyB.categoryBitMask == PhysicsCategory.Water || contact.bodyB.categoryBitMask == PhysicsCategory.Sky)
