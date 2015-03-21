@@ -39,8 +39,11 @@ class GameScene: SKScene, SKPhysicsContactDelegate, UIGestureRecognizerDelegate 
     var harpoonLabel: SKLabelNode!
     var scoreLabel: SKLabelNode!
     
-    var fishArray: [Fish!] = []
-    var numberOfFish: Int = 5
+    //var fishArray: [Fish!] = []
+    var numberOfFish: Int = 0
+    var fishCounter: Int = 0
+    
+    var level: Int = 1
 
 
     override func didMoveToView(view: SKView) {
@@ -52,6 +55,9 @@ class GameScene: SKScene, SKPhysicsContactDelegate, UIGestureRecognizerDelegate 
         //build the harpoon and add initial harpoon count
         createNewHarpoon()
         harpoonsLeft = 99
+        
+        numberOfFish = 5
+
         
         //add water
         water = self.childNodeWithName("water") as SKSpriteNode
@@ -101,8 +107,10 @@ class GameScene: SKScene, SKPhysicsContactDelegate, UIGestureRecognizerDelegate 
             newFish.setupFish()
             newFish.moveFish()
             
+            fishCounter++
             
-            self.fishArray.append(newFish)
+            
+            //self.fishArray.append(newFish)
         }
         
         
@@ -143,7 +151,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate, UIGestureRecognizerDelegate 
     {
         harpoon.physicsBody = nil
         harpoon.removeFromParent()
-        harpoonsLeft -= 1
+        harpoonsLeft--
         updateLabels()
        
     }
@@ -211,7 +219,28 @@ class GameScene: SKScene, SKPhysicsContactDelegate, UIGestureRecognizerDelegate 
     {
         var deadFish = contact.bodyB.node as Fish
         score += deadFish.killFish()
+        fishCounter--
+        
         updateLabels()
+        levelCheck()
+        
+    }
+    
+    
+    func levelCheck()
+    {
+        if fishCounter == 0
+        {
+            println("all the fish are gone!")
+            
+            level++
+            addFish(numberOfFish)
+            
+            
+        }
+        
+
+        
         
     }
     

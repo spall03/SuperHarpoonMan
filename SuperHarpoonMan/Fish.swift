@@ -14,6 +14,7 @@ class Fish: SKSpriteNode
     
     var pointValue: Int = 0
     var swimVector: CGVector!
+//    var fishIndex: Int = 0
     
     var startingDepthMax: CGFloat!
     var startingDepthMin: CGFloat!
@@ -47,6 +48,8 @@ class Fish: SKSpriteNode
         
 //        self.position.x = random(min: self.size.width, max: parent!.frame.size.width - self.size.width)
 //        self.position.y = random(min: self.size.height, max: parent!.frame.size.height - self.size.height)
+        
+//        self.fishIndex = fishIndex //keeping track of this fish in the array
         
         self.position.x = random(-20, max: 20)
         self.position.y = random(startingDepthMin, max: startingDepthMax)
