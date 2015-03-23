@@ -17,6 +17,7 @@
 		C69A2C311AB22BC30098F885 /* SuperHarpoonManTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = C69A2C301AB22BC30098F885 /* SuperHarpoonManTests.swift */; };
 		C6AD9C5D1ABB907400971BD9 /* RedFish.swift in Sources */ = {isa = PBXBuildFile; fileRef = C6AD9C5C1ABB907400971BD9 /* RedFish.swift */; };
 		C6AD9C5F1ABBB56A00971BD9 /* BlueFish.swift in Sources */ = {isa = PBXBuildFile; fileRef = C6AD9C5E1ABBB56A00971BD9 /* BlueFish.swift */; };
+		C6AD9C611AC0A6B400971BD9 /* GoldFish.swift in Sources */ = {isa = PBXBuildFile; fileRef = C6AD9C601AC0A6B400971BD9 /* GoldFish.swift */; };
 		C6FA9E311AB8D13200656890 /* Harpoon.swift in Sources */ = {isa = PBXBuildFile; fileRef = C6FA9E301AB8D13200656890 /* Harpoon.swift */; };
 		C6FA9E331ABA119700656890 /* Fish.swift in Sources */ = {isa = PBXBuildFile; fileRef = C6FA9E321ABA119700656890 /* Fish.swift */; };
 /* End PBXBuildFile section */
@@ -46,6 +47,7 @@
 		C69A2C301AB22BC30098F885 /* SuperHarpoonManTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SuperHarpoonManTests.swift; sourceTree = "<group>"; };
 		C6AD9C5C1ABB907400971BD9 /* RedFish.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RedFish.swift; sourceTree = "<group>"; };
 		C6AD9C5E1ABBB56A00971BD9 /* BlueFish.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BlueFish.swift; sourceTree = "<group>"; };
+		C6AD9C601AC0A6B400971BD9 /* GoldFish.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GoldFish.swift; sourceTree = "<group>"; };
 		C6FA9E301AB8D13200656890 /* Harpoon.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Harpoon.swift; sourceTree = "<group>"; };
 		C6FA9E321ABA119700656890 /* Fish.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Fish.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -93,6 +95,7 @@
 				C6FA9E301AB8D13200656890 /* Harpoon.swift */,
 				C6AD9C5E1ABBB56A00971BD9 /* BlueFish.swift */,
 				C6AD9C5C1ABB907400971BD9 /* RedFish.swift */,
+				C6AD9C601AC0A6B400971BD9 /* GoldFish.swift */,
 				C6FA9E321ABA119700656890 /* Fish.swift */,
 				C69A2C181AB22BC20098F885 /* GameScene.sks */,
 				C69A2C1A1AB22BC20098F885 /* GameScene.swift */,
@@ -232,6 +235,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				C6FA9E331ABA119700656890 /* Fish.swift in Sources */,
+				C6AD9C611AC0A6B400971BD9 /* GoldFish.swift in Sources */,
 				C69A2C1B1AB22BC20098F885 /* GameScene.swift in Sources */,
 				C6AD9C5F1ABBB56A00971BD9 /* BlueFish.swift in Sources */,
 				C69A2C1D1AB22BC20098F885 /* GameViewController.swift in Sources */,

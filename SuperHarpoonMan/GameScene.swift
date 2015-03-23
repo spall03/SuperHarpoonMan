@@ -93,16 +93,22 @@ class GameScene: SKScene, SKPhysicsContactDelegate, UIGestureRecognizerDelegate 
             
             var newFish: Fish!
             
-            var r = randomInt(1, upper: 2)
+            var r = randomInt(1, upper: 3)
             
             if r == 1
             {
               newFish = RedFish()
             }
-            else
+            if r == 2
             {
               newFish = BlueFish()
             }
+            if r == 3
+            {
+              newFish = GoldFish()
+            }
+            
+            
             water.addChild(newFish)
             newFish.setupFish()
             newFish.moveFish()

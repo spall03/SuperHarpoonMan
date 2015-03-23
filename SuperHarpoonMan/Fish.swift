@@ -20,7 +20,11 @@ class Fish: SKSpriteNode
     var startingDepthMin: CGFloat!
     
     var horizontalMaxVector: CGFloat!
+    var horizontalMinVector: CGFloat!
     var verticalMaxVector: CGFloat!
+    var verticalMinVector: CGFloat!
+
+    
     var minVectorDuration: CGFloat!
     var maxVectorDuration: CGFloat!
     var minPauseDuration: CGFloat!
@@ -40,6 +44,7 @@ class Fish: SKSpriteNode
     
     func setupFish()
     {
+        
        
         //assign the fish a random starting position in the water
         
@@ -55,11 +60,11 @@ class Fish: SKSpriteNode
         self.position.y = random(startingDepthMin, max: startingDepthMax)
         
         //define the fish's movement range
-//        horizontalRange = SKRange(lowerLimit: water.frame.minX, upperLimit: water.frame.maxX)
-//        verticalRange = SKRange(lowerLimit: water.frame.minY, upperLimit: water.frame.maxY)
-//        
-//        let movementBox = SKConstraint.positionX(horizontalRange, y: verticalRange)
-//        self.constraints = [movementBox]
+        horizontalRange = SKRange(lowerLimit: -20, upperLimit: 20)
+        verticalRange = SKRange(lowerLimit: -20, upperLimit: 20)
+        
+        let movementBox = SKConstraint.positionX(horizontalRange, y: verticalRange)
+        self.constraints = [movementBox]
         
         //set up fish physics
         self.physicsBody = SKPhysicsBody(rectangleOfSize: self.size)
@@ -79,8 +84,29 @@ class Fish: SKSpriteNode
     func moveFish()
     {
         var duration = NSTimeInterval(random(minVectorDuration, max: maxVectorDuration))
-        var dx = random(-horizontalMaxVector, max: horizontalMaxVector)
-        var dy = random(-verticalMaxVector, max: verticalMaxVector)
+        var dx = random((-horizontalMaxVector), max: (horizontalMaxVector))
+        var dy = random((-verticalMaxVector), max: (verticalMaxVector))
+        
+        
+        //minimum vector checks for positive and negative horizontal and vertical components
+        if (dx < horizontalMinVector && dx > 0)
+        {
+            dx = horizontalMinVector
+        }
+        if (dx > -horizontalMinVector && dx < 0)
+        {
+            dx = -horizontalMinVector
+        }
+        
+        if (dy < verticalMinVector && dy > 0)
+        {
+            dy = verticalMinVector
+        }
+        if (dy > -verticalMinVector && dy < 0)
+        {
+            dy = -verticalMinVector
+        }
+        
         
         swimVector = CGVector(dx: dx, dy: dy) //keep track of the fish's vector so we can change it if it bangs into the side of the water
         

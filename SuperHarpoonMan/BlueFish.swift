@@ -21,7 +21,10 @@ class BlueFish: Fish
         startingDepthMin = -25
         
         horizontalMaxVector = 20
+        horizontalMinVector = 5
         verticalMaxVector = 10
+        verticalMinVector = 0
+        
         minVectorDuration = 1
         maxVectorDuration = 3
         minPauseDuration = 1

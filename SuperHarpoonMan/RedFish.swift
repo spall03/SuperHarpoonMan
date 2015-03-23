@@ -22,7 +22,10 @@ class RedFish: Fish
         startingDepthMin = -20
         
         horizontalMaxVector = 10
+        horizontalMinVector = 0
         verticalMaxVector = 5
+        verticalMinVector = 0
+        
         minVectorDuration = 2
         maxVectorDuration = 4
         minPauseDuration = 2
