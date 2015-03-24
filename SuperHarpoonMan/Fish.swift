@@ -50,27 +50,16 @@ class Fish: SKSpriteNode
        
         //assign the fish a random starting position in the water
         
-//        self.position.x = 400.0
-//        self.position.y = 300.0
-        
-//        self.position.x = random(self.size.width, max: parent!.frame.size.width - self.size.width)
-//        self.position.y = random(self.size.height, max: parent!.frame.size.height - self.size.height)
-        
-//        self.fishIndex = fishIndex //keeping track of this fish in the array
-        
-        self.position.x = random(midScreen.x - 50, max: midScreen.x + 50)
+        self.position.x = random(midScreen.x - 150, max: midScreen.x + 150)
         self.position.y = random(midScreen.y, max: startingDepthMax)
-        
-//        self.position.x = 0
-//        self.position.y = 0
     
         
         //define the fish's movement range
-        horizontalRange = SKRange(lowerLimit: -20, upperLimit: 20)
-        verticalRange = SKRange(lowerLimit: -20, upperLimit: 20)
+        horizontalRange = SKRange(lowerLimit: 0, upperLimit: 375)
+        verticalRange = SKRange(lowerLimit: 0, upperLimit: 450)
         
         let movementBox = SKConstraint.positionX(horizontalRange, y: verticalRange)
-        //self.constraints = [movementBox]
+        self.constraints = [movementBox]
         
         //set up fish physics
         self.physicsBody = SKPhysicsBody(rectangleOfSize: self.size)
@@ -173,6 +162,79 @@ class Fish: SKSpriteNode
         self.removeFromParent()
         
         return self.pointValue
+        
+    }
+    
+    func pickRandomFish(level: Int) -> Fish
+    {
+        
+        var newFish: Fish!
+        
+        var r = randomInt(1, upper: 100)
+        
+        if (level >= 1 && level <= 3)
+        {
+            if (r >= 1 && r <= 75)
+            {
+                newFish = RedFish()
+            }
+            else if (r >= 76 && r <= 90)
+            {
+                newFish = BlueFish()
+            }
+            else
+            {
+                newFish = GoldFish()
+            }
+        }
+        else if (level >= 4 && level <= 6)
+        {
+            if (r >= 1 && r <= 45)
+            {
+                newFish = RedFish()
+            }
+            else if (r >= 46 && r <= 85)
+            {
+                newFish = BlueFish()
+            }
+            else
+            {
+                newFish = GoldFish()
+            }
+        }
+        else if (level >= 7 && level <= 9)
+        {
+            if (r >= 1 && r <= 25)
+            {
+                newFish = RedFish()
+            }
+            else if (r >= 26 && r <= 50)
+            {
+                newFish = BlueFish()
+            }
+            else
+            {
+                newFish = GoldFish()
+            }
+        }
+        else
+        {
+            if (r >= 1 && r <= 15)
+            {
+                newFish = RedFish()
+            }
+            else if (r >= 16 && r <= 40)
+            {
+                newFish = BlueFish()
+            }
+            else
+            {
+                newFish = GoldFish()
+            }
+            
+        }
+        
+        return newFish
         
     }
     
