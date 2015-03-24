@@ -15,16 +15,16 @@ class RedFish: Fish
 
     convenience init()
     {
-        self.init(texture: nil, color: UIColor.redColor(), size: CGSizeMake(10.0, 5.0))
+        self.init(texture: nil, color: UIColor.redColor(), size: CGSizeMake(100.0, 30.0))
         pointValue = 10
         
-        startingDepthMax = 20
-        startingDepthMin = -20
+        startingDepthMax = 300
+
         
-        horizontalMaxVector = 10
-        horizontalMinVector = 0
-        verticalMaxVector = 5
-        verticalMinVector = 0
+        horizontalMaxVector = 200
+        horizontalMinVector = 100
+        verticalMaxVector = 200
+        verticalMinVector = 100
         
         minVectorDuration = 2
         maxVectorDuration = 4

@@ -14,20 +14,20 @@ class GoldFish: Fish
     
     convenience init()
     {
-        self.init(texture: nil, color: UIColor.yellowColor(), size: CGSizeMake(6.0, 2.0))
+        self.init(texture: nil, color: UIColor.yellowColor(), size: CGSizeMake(50.0, 15.0))
         pointValue = 50
         
-        startingDepthMax = -10
-        startingDepthMin = -30
+        startingDepthMax = 100
+
         
-        horizontalMaxVector = 20
-        horizontalMinVector = 10
-        verticalMaxVector = 3
+        horizontalMaxVector = 300
+        horizontalMinVector = 200
+        verticalMaxVector = 100
         verticalMinVector = 0
         
         
         minVectorDuration = 1
-        maxVectorDuration = 1
+        maxVectorDuration = 2
         minPauseDuration = 0
         maxPauseDuration = 1
         

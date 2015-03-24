@@ -13,8 +13,8 @@ import SpriteKit
 class Harpoon: SKSpriteNode
 {
     
-    let harpoonPosX: CGFloat = 388.6
-    let harpoonPosY: CGFloat = 671.5
+    let harpoonPosX: CGFloat = 125.0
+    let harpoonPosY: CGFloat = 600.0
     
     let harpoonTipPosX: CGFloat = 75.0
     let harpoonTipPosY: CGFloat = 0.0

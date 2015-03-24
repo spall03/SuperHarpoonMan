@@ -20,6 +20,8 @@ struct PhysicsCategory {
 }
 
 
+
+
 class GameScene: SKScene, SKPhysicsContactDelegate, UIGestureRecognizerDelegate {
 
 
@@ -34,10 +36,11 @@ class GameScene: SKScene, SKPhysicsContactDelegate, UIGestureRecognizerDelegate 
     var leftsky: SKSpriteNode!
     var rightsky: SKSpriteNode!
     
-    var waterSides: SKNode!
+    var waterSides: SKSpriteNode!
     
     var harpoonLabel: SKLabelNode!
     var scoreLabel: SKLabelNode!
+    var levelLabel: SKLabelNode!
     
     //var fishArray: [Fish!] = []
     var numberOfFish: Int = 0
@@ -62,7 +65,9 @@ class GameScene: SKScene, SKPhysicsContactDelegate, UIGestureRecognizerDelegate 
         //add water
         water = self.childNodeWithName("water") as SKSpriteNode
         
-        waterSides = SKNode()
+        waterSides = SKSpriteNode(texture: nil, color: UIColor.whiteColor(), size: water.size)
+        waterSides.position = water.position
+        waterSides.alpha = 0 //make it invisible
         self.addChild(waterSides)
         
         //add sky borders
@@ -85,38 +90,91 @@ class GameScene: SKScene, SKPhysicsContactDelegate, UIGestureRecognizerDelegate 
 
     }
     
+    func pickRandomFish() -> Fish
+    {
+        
+        var newFish: Fish!
+        
+        var r = randomInt(1, upper: 100)
+        
+        if (level >= 1 && level <= 3)
+        {
+            if (r >= 1 && r <= 75)
+            {
+                newFish = RedFish()
+            }
+            else if (r >= 76 && r <= 90)
+            {
+                newFish = BlueFish()
+            }
+            else
+            {
+                newFish = GoldFish()
+            }
+        }
+        else if (level >= 4 && level <= 6)
+        {
+            if (r >= 1 && r <= 45)
+            {
+                newFish = RedFish()
+            }
+            else if (r >= 46 && r <= 85)
+            {
+                newFish = BlueFish()
+            }
+            else
+            {
+                newFish = GoldFish()
+            }
+        }
+        else if (level >= 7 && level <= 9)
+        {
+            if (r >= 1 && r <= 25)
+            {
+                newFish = RedFish()
+            }
+            else if (r >= 26 && r <= 50)
+            {
+                newFish = BlueFish()
+            }
+            else
+            {
+                newFish = GoldFish()
+            }
+        }
+        else
+        {
+            if (r >= 1 && r <= 15)
+            {
+                newFish = RedFish()
+            }
+            else if (r >= 16 && r <= 40)
+            {
+                newFish = BlueFish()
+            }
+            else
+            {
+                newFish = GoldFish()
+            }
+            
+        }
+        
+        return newFish
+        
+    }
+    
     func addFish(numberOfFish:Int)
     {
         
+        
         for var i = 0; i < numberOfFish; i++
         {
-            
-            var newFish: Fish!
-            
-            var r = randomInt(1, upper: 3)
-            
-            if r == 1
-            {
-              newFish = RedFish()
-            }
-            if r == 2
-            {
-              newFish = BlueFish()
-            }
-            if r == 3
-            {
-              newFish = GoldFish()
-            }
-            
-            
-            water.addChild(newFish)
+            let newFish = pickRandomFish()
+            self.addChild(newFish)
             newFish.setupFish()
             newFish.moveFish()
             
             fishCounter++
-            
-            
-            //self.fishArray.append(newFish)
         }
         
         
@@ -126,17 +184,23 @@ class GameScene: SKScene, SKPhysicsContactDelegate, UIGestureRecognizerDelegate 
     {
         harpoonLabel = SKLabelNode(text: "Harpoons: \(harpoonsLeft)")
         scoreLabel = SKLabelNode(text: "Score: \(score)")
+        levelLabel = SKLabelNode(text: "Level: \(level)")
         
-        harpoonLabel.position = CGPointMake(510.0, 725.0)
+        harpoonLabel.position = CGPointMake(300.0, 650.0)
         harpoonLabel.fontName = "Chalkduster"
         harpoonLabel.fontSize = 18
         
-        scoreLabel.position = CGPointMake(510.0, 710.0)
+        scoreLabel.position = CGPointMake(300.0, 635.0)
         scoreLabel.fontName = "Chalkduster"
         scoreLabel.fontSize = 14
         
+        levelLabel.position = CGPointMake(300.0, 615.0)
+        levelLabel.fontName = "Chalkduster"
+        levelLabel.fontSize = 14
+        
         self.addChild(harpoonLabel)
         self.addChild(scoreLabel)
+        self.addChild(levelLabel)
         
     }
     
@@ -144,6 +208,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate, UIGestureRecognizerDelegate 
     {
         harpoonLabel.text = "Harpoons: \(harpoonsLeft)"
         scoreLabel.text = "Score: \(score)"
+        levelLabel.text = "Level: \(level)"
     }
     
     func createNewHarpoon()
@@ -151,6 +216,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate, UIGestureRecognizerDelegate 
         harpoon = Harpoon(texture: nil, color: UIColor.whiteColor(), size: CGSizeMake(150.0, 5.0))
         self.addChild(harpoon)
         harpoon.setupHarpoon()
+        self.view?.userInteractionEnabled = true
     }
     
     func killHarpoon()
@@ -170,11 +236,12 @@ class GameScene: SKScene, SKPhysicsContactDelegate, UIGestureRecognizerDelegate 
         water.physicsBody = SKPhysicsBody(rectangleOfSize: water.size)
         water.physicsBody!.dynamic = false
         water.physicsBody!.categoryBitMask = PhysicsCategory.Water
-        water.physicsBody!.contactTestBitMask = PhysicsCategory.Harpoon | PhysicsCategory.Fish
+        water.physicsBody!.contactTestBitMask = PhysicsCategory.Harpoon
         water.physicsBody!.collisionBitMask = PhysicsCategory.None
         
-        waterSides.physicsBody = SKPhysicsBody(edgeLoopFromRect: self.view!.frame)
-        println(self.view!.frame)
+        waterSides.physicsBody = SKPhysicsBody(rectangleOfSize: waterSides.size)
+//        println(self.view!.frame)
+        waterSides.physicsBody!.dynamic = false
         waterSides.physicsBody!.categoryBitMask = PhysicsCategory.WaterEdge
         waterSides.physicsBody!.contactTestBitMask = PhysicsCategory.Fish
         waterSides.physicsBody!.collisionBitMask = PhysicsCategory.None
@@ -212,11 +279,11 @@ class GameScene: SKScene, SKPhysicsContactDelegate, UIGestureRecognizerDelegate 
             
         }
         
-        if (contact.bodyA.categoryBitMask == PhysicsCategory.Fish) && (contact.bodyB.categoryBitMask == PhysicsCategory.WaterEdge)
-        {
-            println("Fish hit side of screen!")
-            
-        }
+//        if (contact.bodyA.categoryBitMask == PhysicsCategory.Fish) && (contact.bodyB.categoryBitMask == PhysicsCategory.WaterEdge)
+//        {
+//            println("Fish out of water!")
+//            
+//        }
         
   
     }
@@ -240,13 +307,10 @@ class GameScene: SKScene, SKPhysicsContactDelegate, UIGestureRecognizerDelegate 
             println("all the fish are gone!")
             
             level++
+            updateLabels()
             addFish(numberOfFish)
             
-            
         }
-        
-
-        
         
     }
     
@@ -266,11 +330,13 @@ class GameScene: SKScene, SKPhysicsContactDelegate, UIGestureRecognizerDelegate 
             
             killHarpoon()
             createNewHarpoon()
+
         }
         
-        if (contact.bodyA.categoryBitMask == PhysicsCategory.Fish) && (contact.bodyB.categoryBitMask == PhysicsCategory.Water)
+        if (contact.bodyA.categoryBitMask == PhysicsCategory.Fish) && (contact.bodyB.categoryBitMask == PhysicsCategory.WaterEdge)
         {
-            println("Fish out of water!")
+            let fish = contact.bodyA.node as Fish
+            fish.bounceFish()
             
         }
 
@@ -352,6 +418,8 @@ class GameScene: SKScene, SKPhysicsContactDelegate, UIGestureRecognizerDelegate 
             
             let impulse = getHarpoonImpulse()
             
+            self.view?.userInteractionEnabled = false //disallow controls
+            
             harpoon.physicsBody!.pinned = false
             harpoon.physicsBody!.applyImpulse(impulse)
            
@@ -363,20 +431,22 @@ class GameScene: SKScene, SKPhysicsContactDelegate, UIGestureRecognizerDelegate 
     override func update(currentTime: CFTimeInterval) {
         /* Called before each frame is rendered */
         
-//        for fish in fishArray
-//        {
+//        self.enumerateChildNodesWithName("fish", usingBlock: {
+//            (fish: SKNode!, stop: UnsafeMutablePointer<ObjCBool>) -> Void in
 //            
-//            if fish.physicsBody!.resting
+//            let thisFish = fish as Fish
+//            
+//            if (thisFish.position.x < -thisFish.size.width/2.0 || thisFish.position.x > self.view!.frame.width + thisFish.size.width/2.0
+//            || thisFish.position.y < -thisFish.size.height/2.0 || thisFish.position.y > self.size.height + thisFish.size.height/2.0)
+//            
 //            {
-//                fish.moveFish()
-//                
+//                    thisFish.bounceFish()
 //            }
 //            
-//            
-//        }
+//        })
+    
         
     }
-    
     func randomInt (lower: Int , upper: Int) -> Int {
         return lower + Int(arc4random_uniform(upper - lower + 1))
     }

@@ -91,15 +91,11 @@
 		C69A2C131AB22BC20098F885 /* SuperHarpoonMan */ = {
 			isa = PBXGroup;
 			children = (
+				C6AD9C631AC0ADFD00971BD9 /* View Controllers */,
+				C6AD9C621AC0ADE700971BD9 /* Data Models */,
 				C69A2C161AB22BC20098F885 /* AppDelegate.swift */,
-				C6FA9E301AB8D13200656890 /* Harpoon.swift */,
-				C6AD9C5E1ABBB56A00971BD9 /* BlueFish.swift */,
-				C6AD9C5C1ABB907400971BD9 /* RedFish.swift */,
-				C6AD9C601AC0A6B400971BD9 /* GoldFish.swift */,
-				C6FA9E321ABA119700656890 /* Fish.swift */,
 				C69A2C181AB22BC20098F885 /* GameScene.sks */,
 				C69A2C1A1AB22BC20098F885 /* GameScene.swift */,
-				C69A2C1C1AB22BC20098F885 /* GameViewController.swift */,
 				C69A2C1E1AB22BC30098F885 /* Main.storyboard */,
 				C69A2C211AB22BC30098F885 /* Images.xcassets */,
 				C69A2C231AB22BC30098F885 /* LaunchScreen.xib */,
@@ -131,6 +127,26 @@
 				C69A2C2F1AB22BC30098F885 /* Info.plist */,
 			);
 			name = "Supporting Files";
+			sourceTree = "<group>";
+		};
+		C6AD9C621AC0ADE700971BD9 /* Data Models */ = {
+			isa = PBXGroup;
+			children = (
+				C6FA9E301AB8D13200656890 /* Harpoon.swift */,
+				C6AD9C5E1ABBB56A00971BD9 /* BlueFish.swift */,
+				C6AD9C5C1ABB907400971BD9 /* RedFish.swift */,
+				C6AD9C601AC0A6B400971BD9 /* GoldFish.swift */,
+				C6FA9E321ABA119700656890 /* Fish.swift */,
+			);
+			name = "Data Models";
+			sourceTree = "<group>";
+		};
+		C6AD9C631AC0ADFD00971BD9 /* View Controllers */ = {
+			isa = PBXGroup;
+			children = (
+				C69A2C1C1AB22BC20098F885 /* GameViewController.swift */,
+			);
+			name = "View Controllers";
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */

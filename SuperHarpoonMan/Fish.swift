@@ -17,7 +17,7 @@ class Fish: SKSpriteNode
 //    var fishIndex: Int = 0
     
     var startingDepthMax: CGFloat!
-    var startingDepthMin: CGFloat!
+
     
     var horizontalMaxVector: CGFloat!
     var horizontalMinVector: CGFloat!
@@ -36,47 +36,53 @@ class Fish: SKSpriteNode
     override init(texture: SKTexture!, color: UIColor!, size: CGSize)
     {
         super.init(texture: texture, color: color, size: size)
-
-      
+        self.name = "fish"
         
     }
     
     
     func setupFish()
     {
-        
+
+        let screenWidth = self.scene?.view?.frame.width
+        let screenHeight = self.scene?.view?.frame.height
+        let midScreen = CGPointMake(screenWidth! / 2, screenHeight! / 2)
        
         //assign the fish a random starting position in the water
         
 //        self.position.x = 400.0
 //        self.position.y = 300.0
         
-//        self.position.x = random(min: self.size.width, max: parent!.frame.size.width - self.size.width)
-//        self.position.y = random(min: self.size.height, max: parent!.frame.size.height - self.size.height)
+//        self.position.x = random(self.size.width, max: parent!.frame.size.width - self.size.width)
+//        self.position.y = random(self.size.height, max: parent!.frame.size.height - self.size.height)
         
 //        self.fishIndex = fishIndex //keeping track of this fish in the array
         
-        self.position.x = random(-20, max: 20)
-        self.position.y = random(startingDepthMin, max: startingDepthMax)
+        self.position.x = random(midScreen.x - 50, max: midScreen.x + 50)
+        self.position.y = random(midScreen.y, max: startingDepthMax)
+        
+//        self.position.x = 0
+//        self.position.y = 0
+    
         
         //define the fish's movement range
         horizontalRange = SKRange(lowerLimit: -20, upperLimit: 20)
         verticalRange = SKRange(lowerLimit: -20, upperLimit: 20)
         
         let movementBox = SKConstraint.positionX(horizontalRange, y: verticalRange)
-        self.constraints = [movementBox]
+        //self.constraints = [movementBox]
         
         //set up fish physics
         self.physicsBody = SKPhysicsBody(rectangleOfSize: self.size)
-        self.physicsBody!.dynamic = false
-//        self.physicsBody!.pinned = false
-//        self.physicsBody!.affectedByGravity = false
-//        self.physicsBody!.allowsRotation = false
+        self.physicsBody!.dynamic = true
+        self.physicsBody!.pinned = false
+        self.physicsBody!.affectedByGravity = false
+        self.physicsBody!.allowsRotation = false
         
         //set up fish collision detection
         self.physicsBody!.categoryBitMask = PhysicsCategory.Fish
         self.physicsBody!.collisionBitMask = PhysicsCategory.None
-        self.physicsBody!.contactTestBitMask = PhysicsCategory.HarpoonTip | PhysicsCategory.Water
+        self.physicsBody!.contactTestBitMask = PhysicsCategory.HarpoonTip | PhysicsCategory.WaterEdge
         
         
     }
@@ -112,6 +118,7 @@ class Fish: SKSpriteNode
         
         var movement = SKAction.moveBy(swimVector, duration: duration)
         
+//        self.physicsBody?.applyImpulse(swimVector)
         self.runAction(movement, completion: { () -> Void in
             var wait = SKAction.waitForDuration(NSTimeInterval(self.random(self.minPauseDuration, max: self.maxPauseDuration)))
             
@@ -126,8 +133,36 @@ class Fish: SKSpriteNode
     func bounceFish()
     {
         
+        println("bounce")
+        
+        //figure out the edge the fish has gone off of
+//        if (self.position.x < -self.size.width/2.0)
+//        {
+//            
+//            
+//        }
+//        else if
+//        {
+//        
+//        
+//        
+//        }
+//        else if
+//        {
+//        
+//        
+//        }
+//        else
+//        {
+//            
+//            
+//        }
+//        
+//        || thisFish.position.x > self.view!.frame.width + thisFish.size.width/2.0
+//        || thisFish.position.y < -thisFish.size.height/2.0 || thisFish.position.y > self.size.height + thisFish.size.height/2.0)
         
         
+        //reflect the vector accordingly
         
         
     }

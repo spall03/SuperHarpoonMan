@@ -14,16 +14,16 @@ class BlueFish: Fish
     
     convenience init()
     {
-        self.init(texture: nil, color: UIColor.blueColor(), size: CGSizeMake(10.0, 5.0))
+        self.init(texture: nil, color: UIColor.blueColor(), size: CGSizeMake(100.0, 30.0))
         pointValue = 20
         
-        startingDepthMax = 10
-        startingDepthMin = -25
+        startingDepthMax = 200
+
         
-        horizontalMaxVector = 20
-        horizontalMinVector = 5
-        verticalMaxVector = 10
-        verticalMinVector = 0
+        horizontalMaxVector = 250
+        horizontalMinVector = 150
+        verticalMaxVector = 300
+        verticalMinVector = 150
         
         minVectorDuration = 1
         maxVectorDuration = 3
