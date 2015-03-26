@@ -50,7 +50,7 @@ class Harpoon: SKSpriteNode
         
         //set up harpoon body collision
         self.physicsBody!.categoryBitMask = PhysicsCategory.Harpoon
-        self.physicsBody!.collisionBitMask = PhysicsCategory.None
+        self.physicsBody!.collisionBitMask = PhysicsCategory.WaterEdge
         self.physicsBody!.contactTestBitMask = PhysicsCategory.Water
         
         //set up harpoon tip physics

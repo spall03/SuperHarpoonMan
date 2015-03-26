@@ -76,13 +76,14 @@ class Fish: SKSpriteNode
         self.physicsBody = SKPhysicsBody(rectangleOfSize: self.size)
         self.physicsBody!.dynamic = true
         self.physicsBody!.pinned = false
+        self.physicsBody!.mass = 5.0
         self.physicsBody!.affectedByGravity = false
         self.physicsBody!.allowsRotation = false
         
         //set up fish collision detection
         self.physicsBody!.categoryBitMask = PhysicsCategory.Fish
-        self.physicsBody!.collisionBitMask = PhysicsCategory.None
-        self.physicsBody!.contactTestBitMask = PhysicsCategory.HarpoonTip | PhysicsCategory.WaterEdge
+        self.physicsBody!.collisionBitMask = PhysicsCategory.WaterEdge
+        self.physicsBody!.contactTestBitMask = PhysicsCategory.HarpoonTip
         
         
     }
@@ -116,17 +117,18 @@ class Fish: SKSpriteNode
         
         swimVector = CGVector(dx: dx, dy: dy) //keep track of the fish's vector so we can change it if it bangs into the side of the water
         
-        var movement = SKAction.moveBy(swimVector, duration: duration)
-        
-//        self.physicsBody?.applyImpulse(swimVector)
-        self.runAction(movement, completion: { () -> Void in
-            var wait = SKAction.waitForDuration(NSTimeInterval(self.random(self.minPauseDuration, max: self.maxPauseDuration)))
-            
-            self.runAction(wait, completion: { () -> Void in
-                self.moveFish()
-            })
-            
-        })
+        self.physicsBody!.applyImpulse( swimVector )
+//        var movement = SKAction.moveBy(swimVector, duration: duration)
+//        
+////        self.physicsBody?.applyImpulse(swimVector)
+//        self.runAction(movement, completion: { () -> Void in
+//            var wait = SKAction.waitForDuration(NSTimeInterval(self.random(self.minPauseDuration, max: self.maxPauseDuration)))
+//            
+//            self.runAction(wait, completion: { () -> Void in
+//                self.moveFish()
+//            })
+//            
+//        })
         
     }
     

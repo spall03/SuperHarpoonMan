@@ -66,9 +66,10 @@ class GameScene: SKScene, SKPhysicsContactDelegate, UIGestureRecognizerDelegate 
         water = self.childNodeWithName("water") as SKSpriteNode
         
         waterSides = SKSpriteNode(texture: nil, color: UIColor.whiteColor(), size: water.size)
+        waterSides.physicsBody = SKPhysicsBody(edgeLoopFromRect: water.frame)
         waterSides.position = water.position
         waterSides.alpha = 0 //make it invisible
-        self.addChild(waterSides)
+        water.addChild(waterSides)
         
         //add sky borders
         leftsky = self.childNodeWithName("leftsky") as SKSpriteNode
@@ -170,7 +171,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate, UIGestureRecognizerDelegate 
         for var i = 0; i < numberOfFish; i++
         {
             let newFish = pickRandomFish()
-            self.addChild(newFish)
+            waterSides.addChild(newFish)
             newFish.setupFish()
             newFish.moveFish()
             
@@ -243,8 +244,8 @@ class GameScene: SKScene, SKPhysicsContactDelegate, UIGestureRecognizerDelegate 
 //        println(self.view!.frame)
         waterSides.physicsBody!.dynamic = false
         waterSides.physicsBody!.categoryBitMask = PhysicsCategory.WaterEdge
-        waterSides.physicsBody!.contactTestBitMask = PhysicsCategory.Fish
-        waterSides.physicsBody!.collisionBitMask = PhysicsCategory.None
+        waterSides.physicsBody!.contactTestBitMask = PhysicsCategory.None
+        waterSides.physicsBody!.collisionBitMask = PhysicsCategory.Fish | PhysicsCategory.Harpoon | PhysicsCategory.HarpoonTip
         
         leftsky.physicsBody = SKPhysicsBody(rectangleOfSize: leftsky.size)
         leftsky.physicsBody!.dynamic = false
@@ -275,16 +276,18 @@ class GameScene: SKScene, SKPhysicsContactDelegate, UIGestureRecognizerDelegate 
         if (contact.bodyA.categoryBitMask == PhysicsCategory.HarpoonTip) && (contact.bodyB.categoryBitMask == PhysicsCategory.Fish)
         {
             println("you hit a fish!")
-            
-            
         }
         
-//        if (contact.bodyA.categoryBitMask == PhysicsCategory.Fish) && (contact.bodyB.categoryBitMask == PhysicsCategory.WaterEdge)
-//        {
-//            println("Fish out of water!")
-//            
-//        }
+        if (contact.bodyA.categoryBitMask == PhysicsCategory.Fish) && (contact.bodyB.categoryBitMask == PhysicsCategory.WaterEdge)
+        {
+            println("Fish out of water!")
+        }
         
+        if (contact.bodyA.categoryBitMask == PhysicsCategory.HarpoonTip) && (contact.bodyB.categoryBitMask == PhysicsCategory.WaterEdge)
+        {
+            println("you hit-a the edge!")
+        }
+
   
     }
     
