@@ -30,6 +30,9 @@ class GameScene: SKScene, SKPhysicsContactDelegate, UIGestureRecognizerDelegate 
     var harpoon: Harpoon!
     var harpoonsLeft: Int = 0
     var score: Int = 0
+    
+    var throwScore: Int = 0 //keeps track of what's been scored on a single throw
+    var extraHarpoonThreshold: Int = 50 //score this number of points on a throw for an extra harpoon
 
     var water: SKSpriteNode!
     
@@ -42,13 +45,14 @@ class GameScene: SKScene, SKPhysicsContactDelegate, UIGestureRecognizerDelegate 
     var scoreLabel: SKLabelNode!
     var levelLabel: SKLabelNode!
     
-    //var fishArray: [Fish!] = []
     var numberOfFish: Int = 0
     var fishCounter: Int = 0
     
     var level: Int = 1
 
 
+    //MARK: Setup
+    
     override func didMoveToView(view: SKView) {
         
         
@@ -57,7 +61,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate, UIGestureRecognizerDelegate 
         
         //build the harpoon and add initial harpoon count
         createNewHarpoon()
-        harpoonsLeft = 99
+        harpoonsLeft = 10
         
         numberOfFish = 5
 
@@ -89,6 +93,98 @@ class GameScene: SKScene, SKPhysicsContactDelegate, UIGestureRecognizerDelegate 
         panGesture.delegate = self
         view.addGestureRecognizer( panGesture )
 
+    }
+    
+    func setupLabels()
+    {
+        harpoonLabel = SKLabelNode(text: "Harpoons: \(harpoonsLeft)")
+        scoreLabel = SKLabelNode(text: "Score: \(score)")
+        levelLabel = SKLabelNode(text: "Level: \(level)")
+        
+        harpoonLabel.position = CGPointMake(300.0, 650.0)
+        harpoonLabel.fontName = "Chalkduster"
+        harpoonLabel.fontSize = 18
+        
+        scoreLabel.position = CGPointMake(300.0, 635.0)
+        scoreLabel.fontName = "Chalkduster"
+        scoreLabel.fontSize = 14
+        
+        levelLabel.position = CGPointMake(300.0, 615.0)
+        levelLabel.fontName = "Chalkduster"
+        levelLabel.fontSize = 14
+        
+        self.addChild(harpoonLabel)
+        self.addChild(scoreLabel)
+        self.addChild(levelLabel)
+        
+    }
+    
+    func setupPhysics()
+    {
+        
+        self.physicsWorld.contactDelegate = self
+        self.physicsBody = SKPhysicsBody(edgeLoopFromRect: self.frame)
+        
+        water.physicsBody = SKPhysicsBody(rectangleOfSize: water.size)
+        water.physicsBody!.dynamic = false
+        water.physicsBody!.categoryBitMask = PhysicsCategory.Water
+        water.physicsBody!.contactTestBitMask = PhysicsCategory.Harpoon
+        water.physicsBody!.collisionBitMask = PhysicsCategory.None
+        
+        waterSides.physicsBody = SKPhysicsBody(edgeLoopFromRect: self.frame)
+        waterSides.physicsBody!.dynamic = false
+        waterSides.physicsBody!.categoryBitMask = PhysicsCategory.WaterEdge
+        waterSides.physicsBody!.contactTestBitMask = PhysicsCategory.Fish
+        waterSides.physicsBody!.collisionBitMask = PhysicsCategory.Fish
+        
+        leftsky.physicsBody = SKPhysicsBody(rectangleOfSize: leftsky.size)
+        leftsky.physicsBody!.dynamic = false
+        leftsky.physicsBody!.categoryBitMask = PhysicsCategory.Sky
+        leftsky.physicsBody!.contactTestBitMask = PhysicsCategory.Harpoon
+        leftsky.physicsBody!.collisionBitMask = PhysicsCategory.None
+        
+        rightsky.physicsBody = SKPhysicsBody(rectangleOfSize: rightsky.size)
+        rightsky.physicsBody!.dynamic = false
+        rightsky.physicsBody!.categoryBitMask = PhysicsCategory.Sky
+        rightsky.physicsBody!.contactTestBitMask = PhysicsCategory.Harpoon
+        rightsky.physicsBody!.collisionBitMask = PhysicsCategory.None
+        
+        
+    }
+    
+//MARK: Fish
+    
+    func addFish(numberOfFish:Int)
+    {
+        
+        var counter = 0
+        
+        //fill up with a certain number of points' worth of fish
+        // Change this to true to test out the bounce with just one fish, centered in the view
+        var DEMO_MODE_FOR_DEBUGGING_BOUNCE = false
+        if ( DEMO_MODE_FOR_DEBUGGING_BOUNCE )
+        {
+            let newFish = RedFish()
+            self.addChild(newFish)
+            newFish.setupFish(true)
+            newFish.moveFish()
+            
+            counter += newFish.pointValue
+            fishCounter++
+        }
+        else
+        {
+            while counter < (4 * extraHarpoonThreshold)
+            {
+                let newFish = pickRandomFish()
+                self.addChild(newFish)
+                newFish.setupFish()
+                newFish.moveFish()
+                
+                counter += newFish.pointValue
+                fishCounter++
+            }
+        }
     }
     
     func pickRandomFish() -> Fish
@@ -164,53 +260,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate, UIGestureRecognizerDelegate 
         
     }
     
-    func addFish(numberOfFish:Int)
-    {
-        
-        
-        for var i = 0; i < numberOfFish; i++
-        {
-            let newFish = pickRandomFish()
-            waterSides.addChild(newFish)
-            newFish.setupFish()
-            newFish.moveFish()
-            
-            fishCounter++
-        }
-        
-        
-    }
-    
-    func setupLabels()
-    {
-        harpoonLabel = SKLabelNode(text: "Harpoons: \(harpoonsLeft)")
-        scoreLabel = SKLabelNode(text: "Score: \(score)")
-        levelLabel = SKLabelNode(text: "Level: \(level)")
-        
-        harpoonLabel.position = CGPointMake(300.0, 650.0)
-        harpoonLabel.fontName = "Chalkduster"
-        harpoonLabel.fontSize = 18
-        
-        scoreLabel.position = CGPointMake(300.0, 635.0)
-        scoreLabel.fontName = "Chalkduster"
-        scoreLabel.fontSize = 14
-        
-        levelLabel.position = CGPointMake(300.0, 615.0)
-        levelLabel.fontName = "Chalkduster"
-        levelLabel.fontSize = 14
-        
-        self.addChild(harpoonLabel)
-        self.addChild(scoreLabel)
-        self.addChild(levelLabel)
-        
-    }
-    
-    func updateLabels()
-    {
-        harpoonLabel.text = "Harpoons: \(harpoonsLeft)"
-        scoreLabel.text = "Score: \(score)"
-        levelLabel.text = "Level: \(level)"
-    }
+//MARK: Harpoon
     
     func createNewHarpoon()
     {
@@ -222,14 +272,69 @@ class GameScene: SKScene, SKPhysicsContactDelegate, UIGestureRecognizerDelegate 
     
     func killHarpoon()
     {
+
+        
         harpoon.physicsBody = nil
         harpoon.removeFromParent()
         harpoonsLeft--
         updateLabels()
-       
+        
+        if harpoonsLeft == 0
+        {
+//            let newFish = pickRandomFish()
+//            waterSides.addChild(newFish)
+//            newFish.setupFish()
+//            newFish.moveFish()
+            gameOver()
+            
+        }
+        
     }
     
-    func setupPhysics()
+    func betweenHarpoonThrows()
+    {
+        
+        let postThrowLabel = SKLabelNode(fontNamed: "chalkduster")
+        postThrowLabel.fontSize = 24
+        postThrowLabel.position = CGPointMake(self.frame.width / 2, self.frame.height / 2)
+        
+        var postThrowLabelString = "Last Throw: +\(throwScore)"
+        
+        if throwScore >= extraHarpoonThreshold
+        {
+            //postThrowLabelString += "Extra Harpoon Awarded!"
+            harpoonsLeft++
+        }
+        
+        postThrowLabel.text = postThrowLabelString
+        self.addChild(postThrowLabel)
+        
+        let floatAction = SKAction.moveBy(CGVectorMake(0, 20), duration: 2)
+        postThrowLabel.runAction(floatAction, completion: { () -> Void in
+            postThrowLabel.removeFromParent()
+        })
+        
+        
+        
+        throwScore = 0 //reset score counter for next throw
+        
+        killHarpoon()
+        createNewHarpoon()
+        
+    }
+    
+    func adjustHarpoonAngle (angle: CGFloat)
+    {
+        
+        
+        let newAngle = angle - degreesToRadians(90.0)
+        
+        harpoon.zRotation = newAngle
+        
+        
+    }
+    
+    func getHarpoonImpulse() -> CGVector
     {
         
         self.physicsWorld.contactDelegate = self
@@ -246,24 +351,22 @@ class GameScene: SKScene, SKPhysicsContactDelegate, UIGestureRecognizerDelegate 
         waterSides.physicsBody!.categoryBitMask = PhysicsCategory.WaterEdge
         waterSides.physicsBody!.contactTestBitMask = PhysicsCategory.None
         waterSides.physicsBody!.collisionBitMask = PhysicsCategory.Fish | PhysicsCategory.Harpoon | PhysicsCategory.HarpoonTip
+        let force = CGFloat(30000.0)
         
-        leftsky.physicsBody = SKPhysicsBody(rectangleOfSize: leftsky.size)
-        leftsky.physicsBody!.dynamic = false
-        leftsky.physicsBody!.categoryBitMask = PhysicsCategory.Sky
-        leftsky.physicsBody!.contactTestBitMask = PhysicsCategory.Harpoon
-        leftsky.physicsBody!.collisionBitMask = PhysicsCategory.None
+        let dx = (force * (cos(harpoon.zRotation)))
+        let dy = (force * (sin(harpoon.zRotation)))
         
-        rightsky.physicsBody = SKPhysicsBody(rectangleOfSize: rightsky.size)
-        rightsky.physicsBody!.dynamic = false
-        rightsky.physicsBody!.categoryBitMask = PhysicsCategory.Sky
-        rightsky.physicsBody!.contactTestBitMask = PhysicsCategory.Harpoon
-        rightsky.physicsBody!.collisionBitMask = PhysicsCategory.None
+        println("\(dx), \(dy)")
         
+        return CGVectorMake(dx, dy)
         
     }
     
+    
+    //MARK: Physics Contact Handlers
+    
     func didBeginContact(contact: SKPhysicsContact) {
-
+        
         
         if (contact.bodyA.categoryBitMask == PhysicsCategory.Harpoon) && (contact.bodyB.categoryBitMask == PhysicsCategory.Water)
         {
@@ -291,16 +394,16 @@ class GameScene: SKScene, SKPhysicsContactDelegate, UIGestureRecognizerDelegate 
   
     }
     
-    func fishHit (contact: SKPhysicsContact)
-    {
-        var deadFish = contact.bodyB.node as Fish
-        score += deadFish.killFish()
-        fishCounter--
-        
-        updateLabels()
-        levelCheck()
-        
-    }
+//    func fishHit (contact: SKPhysicsContact)
+//    {
+//        var deadFish = contact.bodyB.node as Fish
+//        score += deadFish.killFish()
+//        fishCounter--
+//        
+//        updateLabels()
+//        levelCheck()
+//        
+//    }
     
     
     func levelCheck()
@@ -331,31 +434,96 @@ class GameScene: SKScene, SKPhysicsContactDelegate, UIGestureRecognizerDelegate 
         {
             println("harpoon has left the screen!")
             
-            killHarpoon()
-            createNewHarpoon()
-
+            betweenHarpoonThrows()
         }
         
         if (contact.bodyA.categoryBitMask == PhysicsCategory.Fish) && (contact.bodyB.categoryBitMask == PhysicsCategory.WaterEdge)
         {
-            let fish = contact.bodyA.node as Fish
-            fish.bounceFish()
+//            let fish = contact.bodyA.node as Fish
+//            fish.bounceFish()
             
-        }
-
-        
-        
-    }
-    
-    override func touchesBegan(touches: NSSet, withEvent event: UIEvent) {
-        /* Called when a touch begins */
-        
-        for touch: AnyObject in touches {
-            
-
         }
     }
     
+    func fishHit (contact: SKPhysicsContact)
+    {
+        var deadFish = contact.bodyB.node as Fish
+        
+        let scoreLabel = SKLabelNode(text: "+\(deadFish.pointValue)")
+        scoreLabel.fontName = "chalkduster"
+        scoreLabel.fontSize = 12
+        scoreLabel.position = deadFish.position
+        self.addChild(scoreLabel)
+        
+        let floatAction = SKAction.moveBy(CGVectorMake(0, 20), duration: 2)
+        scoreLabel.runAction(floatAction, completion: { () -> Void in
+            scoreLabel.removeFromParent()
+        })
+        
+        
+        throwScore += deadFish.pointValue
+        score += deadFish.killFish()
+        
+        fishCounter--
+        
+        updateLabels()
+        levelCheck()
+        
+    }
+    
+    //MARK: Game Updaters
+    
+    func updateLabels()
+    {
+        harpoonLabel.text = "Harpoons: \(harpoonsLeft)"
+        scoreLabel.text = "Score: \(score)"
+        levelLabel.text = "Level: \(level)"
+    }
+    
+    
+    
+    func gameOver()
+    {
+        
+        println("the game is over!")
+        
+    }
+        
+    //MARK: Touch Handers
+    
+    func handlePan(recognizer: UIPanGestureRecognizer)
+    {
+        
+        var angle: CGFloat
+        
+        if ( recognizer.state == UIGestureRecognizerState.Began || recognizer.state == UIGestureRecognizerState.Changed)
+        {
+            
+            
+            crosshairs.position = self.convertPointFromView(recognizer.locationInView(self.view))
+            
+            angle = getAngle(crosshairs.position)
+            
+            adjustHarpoonAngle(angle)
+            
+            
+        }
+        else if (recognizer.state == UIGestureRecognizerState.Ended)
+        {
+            
+            let impulse = getHarpoonImpulse()
+            
+            self.view?.userInteractionEnabled = false //disallow controls
+            
+            harpoon.physicsBody!.pinned = false
+            harpoon.physicsBody!.applyImpulse(impulse)
+            
+            
+        }
+        
+    }
+    
+    //MARK: Helper Methods
     
     func getAngle (crosshairs: CGPoint) -> CGFloat
     {
@@ -372,84 +540,6 @@ class GameScene: SKScene, SKPhysicsContactDelegate, UIGestureRecognizerDelegate 
         
     }
     
-    func adjustHarpoonAngle (angle: CGFloat)
-    {
-        
-        
-        let newAngle = angle - degreesToRadians(90.0)
-        
-        harpoon.zRotation = newAngle
-        
-        
-    }
-    
-    func getHarpoonImpulse() -> CGVector
-    {
-        
-        let force = CGFloat(30000.0)
-        
-        let dx = (force * (cos(harpoon.zRotation)))
-        let dy = (force * (sin(harpoon.zRotation)))
-        
-        println("\(dx), \(dy)")
-        
-        return CGVectorMake(dx, dy)
-        
-        
-        
-    }
-    
-    func handlePan(recognizer: UIPanGestureRecognizer)
-    {
-        
-        var angle: CGFloat
-        
-        if ( recognizer.state == UIGestureRecognizerState.Began || recognizer.state == UIGestureRecognizerState.Changed)
-        {
-
-            
-            crosshairs.position = self.convertPointFromView(recognizer.locationInView(self.view))
-            
-            angle = getAngle(crosshairs.position)
-            
-            adjustHarpoonAngle(angle)
-            
-
-        }
-        else if (recognizer.state == UIGestureRecognizerState.Ended)
-        {
-            
-            let impulse = getHarpoonImpulse()
-            
-            self.view?.userInteractionEnabled = false //disallow controls
-            
-            harpoon.physicsBody!.pinned = false
-            harpoon.physicsBody!.applyImpulse(impulse)
-           
-        
-        }
-        
-    }
-    
-    override func update(currentTime: CFTimeInterval) {
-        /* Called before each frame is rendered */
-        
-//        self.enumerateChildNodesWithName("fish", usingBlock: {
-//            (fish: SKNode!, stop: UnsafeMutablePointer<ObjCBool>) -> Void in
-//            
-//            let thisFish = fish as Fish
-//            
-//            if (thisFish.position.x < -thisFish.size.width/2.0 || thisFish.position.x > self.view!.frame.width + thisFish.size.width/2.0
-//            || thisFish.position.y < -thisFish.size.height/2.0 || thisFish.position.y > self.size.height + thisFish.size.height/2.0)
-//            
-//            {
-//                    thisFish.bounceFish()
-//            }
-//            
-//        })
-    
-        
-    }
     func randomInt (lower: Int , upper: Int) -> Int {
         return lower + Int(arc4random_uniform(upper - lower + 1))
     }
@@ -461,5 +551,11 @@ class GameScene: SKScene, SKPhysicsContactDelegate, UIGestureRecognizerDelegate 
     func random(min: CGFloat, max: CGFloat) -> CGFloat {
         return random() * (max - min) + min
     }
+    
+    
+
+    
+
+
     
 }

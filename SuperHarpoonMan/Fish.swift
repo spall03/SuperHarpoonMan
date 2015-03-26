@@ -40,8 +40,12 @@ class Fish: SKSpriteNode
         
     }
     
-    
     func setupFish()
+    {
+        setupFish(false)
+    }
+    
+    func setupFish(isDemo: Bool)
     {
 
         let screenWidth = self.scene?.view?.frame.width
@@ -49,34 +53,30 @@ class Fish: SKSpriteNode
         let midScreen = CGPointMake(screenWidth! / 2, screenHeight! / 2)
        
         //assign the fish a random starting position in the water
-        
-//        self.position.x = 400.0
-//        self.position.y = 300.0
-        
-//        self.position.x = random(self.size.width, max: parent!.frame.size.width - self.size.width)
-//        self.position.y = random(self.size.height, max: parent!.frame.size.height - self.size.height)
-        
-//        self.fishIndex = fishIndex //keeping track of this fish in the array
-        
-        self.position.x = random(midScreen.x - 50, max: midScreen.x + 50)
-        self.position.y = random(midScreen.y, max: startingDepthMax)
-        
-//        self.position.x = 0
-//        self.position.y = 0
-    
+        if ( isDemo )
+        {
+            self.position.x = midScreen.x
+            self.position.y = midScreen.y
+        }
+        else
+        {
+            self.position.x = random(midScreen.x - 150, max: midScreen.x + 150)
+            self.position.y = random(midScreen.y, max: startingDepthMax)
+        }
         
         //define the fish's movement range
-        horizontalRange = SKRange(lowerLimit: -20, upperLimit: 20)
-        verticalRange = SKRange(lowerLimit: -20, upperLimit: 20)
+        horizontalRange = SKRange(lowerLimit: 0, upperLimit: 375)
+        verticalRange = SKRange(lowerLimit: 0, upperLimit: 450)
         
         let movementBox = SKConstraint.positionX(horizontalRange, y: verticalRange)
-        //self.constraints = [movementBox]
+        self.constraints = [movementBox]
         
         //set up fish physics
         self.physicsBody = SKPhysicsBody(rectangleOfSize: self.size)
         self.physicsBody!.dynamic = true
         self.physicsBody!.pinned = false
         self.physicsBody!.mass = 5.0
+        self.physicsBody!.restitution = 1.0
         self.physicsBody!.affectedByGravity = false
         self.physicsBody!.allowsRotation = false
         
@@ -118,55 +118,12 @@ class Fish: SKSpriteNode
         swimVector = CGVector(dx: dx, dy: dy) //keep track of the fish's vector so we can change it if it bangs into the side of the water
         
         self.physicsBody!.applyImpulse( swimVector )
-//        var movement = SKAction.moveBy(swimVector, duration: duration)
-//        
-////        self.physicsBody?.applyImpulse(swimVector)
-//        self.runAction(movement, completion: { () -> Void in
-//            var wait = SKAction.waitForDuration(NSTimeInterval(self.random(self.minPauseDuration, max: self.maxPauseDuration)))
-//            
-//            self.runAction(wait, completion: { () -> Void in
-//                self.moveFish()
-//            })
-//            
-//        })
-        
-    }
-    
-    func bounceFish()
-    {
-        
-        println("bounce")
-        
-        //figure out the edge the fish has gone off of
-//        if (self.position.x < -self.size.width/2.0)
-//        {
-//            
-//            
-//        }
-//        else if
-//        {
-//        
-//        
-//        
-//        }
-//        else if
-//        {
-//        
-//        
-//        }
-//        else
-//        {
-//            
-//            
-//        }
-//        
-//        || thisFish.position.x > self.view!.frame.width + thisFish.size.width/2.0
-//        || thisFish.position.y < -thisFish.size.height/2.0 || thisFish.position.y > self.size.height + thisFish.size.height/2.0)
-        
-        
-        //reflect the vector accordingly
-        
-        
+
+        // Just keep swimming...
+        var wait = SKAction.waitForDuration(NSTimeInterval( random(self.minPauseDuration, max:self.maxPauseDuration)))
+        self.runAction(wait, completion: { () -> Void in
+            self.moveFish()
+        })
     }
     
     func killFish() -> Int
@@ -175,6 +132,79 @@ class Fish: SKSpriteNode
         self.removeFromParent()
         
         return self.pointValue
+        
+    }
+    
+    func pickRandomFish(level: Int) -> Fish
+    {
+        
+        var newFish: Fish!
+        
+        var r = randomInt(1, upper: 100)
+        
+        if (level >= 1 && level <= 3)
+        {
+            if (r >= 1 && r <= 75)
+            {
+                newFish = RedFish()
+            }
+            else if (r >= 76 && r <= 90)
+            {
+                newFish = BlueFish()
+            }
+            else
+            {
+                newFish = GoldFish()
+            }
+        }
+        else if (level >= 4 && level <= 6)
+        {
+            if (r >= 1 && r <= 45)
+            {
+                newFish = RedFish()
+            }
+            else if (r >= 46 && r <= 85)
+            {
+                newFish = BlueFish()
+            }
+            else
+            {
+                newFish = GoldFish()
+            }
+        }
+        else if (level >= 7 && level <= 9)
+        {
+            if (r >= 1 && r <= 25)
+            {
+                newFish = RedFish()
+            }
+            else if (r >= 26 && r <= 50)
+            {
+                newFish = BlueFish()
+            }
+            else
+            {
+                newFish = GoldFish()
+            }
+        }
+        else
+        {
+            if (r >= 1 && r <= 15)
+            {
+                newFish = RedFish()
+            }
+            else if (r >= 16 && r <= 40)
+            {
+                newFish = BlueFish()
+            }
+            else
+            {
+                newFish = GoldFish()
+            }
+            
+        }
+        
+        return newFish
         
     }
     
