@@ -415,6 +415,14 @@ class GameScene: SKScene, SKPhysicsContactDelegate, UIGestureRecognizerDelegate 
     
     //MARK: Game Updaters
     
+    func pauseGame()
+    {
+        
+        println("game is paused!")
+        
+        
+    }
+    
     func updateLabels()
     {
         harpoonLabel.text = "Harpoons: \(harpoonsLeft)"

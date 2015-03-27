@@ -26,27 +26,51 @@ extension SKNode {
 }
 
 class GameViewController: UIViewController {
+    
+    var gameScene: GameScene!
+    var gameView: SKView!
 
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        if let scene = GameScene.unarchiveFromFile("GameScene") as? GameScene {
+        gameScene = GameScene.unarchiveFromFile("GameScene") as? GameScene
             // Configure the view.
-            let skView = self.view as SKView
-            skView.showsFPS = true
-            skView.showsNodeCount = true
+            gameView = self.view as SKView
+            gameView.showsFPS = true
+            gameView.showsNodeCount = true
             
             /* Sprite Kit applies additional optimizations to improve rendering performance */
-            skView.ignoresSiblingOrder = true
+            gameView.ignoresSiblingOrder = true
             
             /* Set the scale mode to scale to fit the window */
-            scene.size = skView.bounds.size
-            scene.scaleMode = .AspectFill
+            gameScene.size = gameView.bounds.size
+            gameScene.scaleMode = .AspectFill
             
-            skView.presentScene(scene)
-        }
+            gameView.presentScene(gameScene)
+
     }
 
+    @IBAction func gameDidPause(sender: UIButton) {
+        
+        gameScene.paused = true
+    }
+    
+    @IBAction func unwindToGameViewController(segue: UIStoryboardSegue)
+    {
+        if segue.identifier == "gameResumeSegue"
+        {
+            gameScene.paused = false
+        }
+        else
+        {
+            //GameKitHelper.sharedInstance.saveToLeaderboard(swiftris.score)
+            dismissViewControllerAnimated(false, completion: nil)
+        }
+        
+        
+    }
+    
+    
     override func shouldAutorotate() -> Bool {
         return true
     }
