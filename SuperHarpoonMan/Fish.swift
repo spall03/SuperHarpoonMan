@@ -61,7 +61,8 @@ class Fish: SKSpriteNode
         else
         {
             self.position.x = random(midScreen.x - 150, max: midScreen.x + 150)
-            self.position.y = random(midScreen.y, max: startingDepthMax)
+            self.position.y = random((midScreen.y), max: startingDepthMax)
+            println("\(self) - YPos:\(self.position.y)")
         }
         
         //define the fish's movement range

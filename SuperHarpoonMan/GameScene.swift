@@ -39,8 +39,6 @@ class GameScene: SKScene, SKPhysicsContactDelegate, UIGestureRecognizerDelegate 
     var leftsky: SKSpriteNode!
     var rightsky: SKSpriteNode!
     
-    var waterSides: SKSpriteNode!
-    
     var harpoonLabel: SKLabelNode!
     var scoreLabel: SKLabelNode!
     var levelLabel: SKLabelNode!
@@ -69,11 +67,6 @@ class GameScene: SKScene, SKPhysicsContactDelegate, UIGestureRecognizerDelegate 
         //add water
         water = self.childNodeWithName("water") as SKSpriteNode
         
-        waterSides = SKSpriteNode(texture: nil, color: UIColor.whiteColor(), size: water.size)
-        waterSides.physicsBody = SKPhysicsBody(edgeLoopFromRect: water.frame)
-        waterSides.position = water.position
-        waterSides.alpha = 0 //make it invisible
-        water.addChild(waterSides)
         
         //add sky borders
         leftsky = self.childNodeWithName("leftsky") as SKSpriteNode
@@ -125,17 +118,15 @@ class GameScene: SKScene, SKPhysicsContactDelegate, UIGestureRecognizerDelegate 
         self.physicsWorld.contactDelegate = self
         self.physicsBody = SKPhysicsBody(edgeLoopFromRect: self.frame)
         
+        self.view?.showsPhysics = true;
+        self.view?.showsFields = true;
+
         water.physicsBody = SKPhysicsBody(rectangleOfSize: water.size)
         water.physicsBody!.dynamic = false
         water.physicsBody!.categoryBitMask = PhysicsCategory.Water
         water.physicsBody!.contactTestBitMask = PhysicsCategory.Harpoon
         water.physicsBody!.collisionBitMask = PhysicsCategory.None
         
-        waterSides.physicsBody = SKPhysicsBody(edgeLoopFromRect: self.frame)
-        waterSides.physicsBody!.dynamic = false
-        waterSides.physicsBody!.categoryBitMask = PhysicsCategory.WaterEdge
-        waterSides.physicsBody!.contactTestBitMask = PhysicsCategory.Fish
-        waterSides.physicsBody!.collisionBitMask = PhysicsCategory.Fish
         
         leftsky.physicsBody = SKPhysicsBody(rectangleOfSize: leftsky.size)
         leftsky.physicsBody!.dynamic = false
@@ -161,7 +152,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate, UIGestureRecognizerDelegate 
         
         //fill up with a certain number of points' worth of fish
         // Change this to true to test out the bounce with just one fish, centered in the view
-        var DEMO_MODE_FOR_DEBUGGING_BOUNCE = false
+        let DEMO_MODE_FOR_DEBUGGING_BOUNCE = false
         if ( DEMO_MODE_FOR_DEBUGGING_BOUNCE )
         {
             let newFish = RedFish()
@@ -336,21 +327,6 @@ class GameScene: SKScene, SKPhysicsContactDelegate, UIGestureRecognizerDelegate 
     
     func getHarpoonImpulse() -> CGVector
     {
-        
-        self.physicsWorld.contactDelegate = self
-        
-        water.physicsBody = SKPhysicsBody(rectangleOfSize: water.size)
-        water.physicsBody!.dynamic = false
-        water.physicsBody!.categoryBitMask = PhysicsCategory.Water
-        water.physicsBody!.contactTestBitMask = PhysicsCategory.Harpoon
-        water.physicsBody!.collisionBitMask = PhysicsCategory.None
-        
-        waterSides.physicsBody = SKPhysicsBody(rectangleOfSize: waterSides.size)
-//        println(self.view!.frame)
-        waterSides.physicsBody!.dynamic = false
-        waterSides.physicsBody!.categoryBitMask = PhysicsCategory.WaterEdge
-        waterSides.physicsBody!.contactTestBitMask = PhysicsCategory.None
-        waterSides.physicsBody!.collisionBitMask = PhysicsCategory.Fish | PhysicsCategory.Harpoon | PhysicsCategory.HarpoonTip
         let force = CGFloat(30000.0)
         
         let dx = (force * (cos(harpoon.zRotation)))
