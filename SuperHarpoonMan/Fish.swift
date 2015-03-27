@@ -80,13 +80,12 @@ class Fish: SKSpriteNode
         self.physicsBody!.restitution = 1.0
         self.physicsBody!.affectedByGravity = false
         self.physicsBody!.allowsRotation = false
+        self.physicsBody!.usesPreciseCollisionDetection = true; // This is a small, fast body
         
         //set up fish collision detection
         self.physicsBody!.categoryBitMask = PhysicsCategory.Fish
-        self.physicsBody!.collisionBitMask = PhysicsCategory.WaterEdge
+        self.physicsBody!.collisionBitMask = PhysicsCategory.None
         self.physicsBody!.contactTestBitMask = PhysicsCategory.HarpoonTip
-        
-        
     }
     
     func moveFish()

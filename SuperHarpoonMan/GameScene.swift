@@ -16,7 +16,6 @@ struct PhysicsCategory {
     static let Water     : UInt32 = 0b11      // 3
     static let Sky       : UInt32 = 0b100     // 4
     static let Fish      : UInt32 = 0b101     // 5
-    static let WaterEdge : UInt32 = 0b110     // 6
 }
 
 
@@ -165,7 +164,8 @@ class GameScene: SKScene, SKPhysicsContactDelegate, UIGestureRecognizerDelegate 
         }
         else
         {
-            while counter < (4 * extraHarpoonThreshold)
+//            while counter < (4 * extraHarpoonThreshold)
+            while counter < (numberOfFish)
             {
                 let newFish = pickRandomFish()
                 self.addChild(newFish)
@@ -356,18 +356,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate, UIGestureRecognizerDelegate 
         {
             println("you hit a fish!")
         }
-        
-        if (contact.bodyA.categoryBitMask == PhysicsCategory.Fish) && (contact.bodyB.categoryBitMask == PhysicsCategory.WaterEdge)
-        {
-            println("Fish out of water!")
-        }
-        
-        if (contact.bodyA.categoryBitMask == PhysicsCategory.HarpoonTip) && (contact.bodyB.categoryBitMask == PhysicsCategory.WaterEdge)
-        {
-            println("you hit-a the edge!")
-        }
 
-  
     }
     
 //    func fishHit (contact: SKPhysicsContact)
@@ -413,12 +402,6 @@ class GameScene: SKScene, SKPhysicsContactDelegate, UIGestureRecognizerDelegate 
             betweenHarpoonThrows()
         }
         
-        if (contact.bodyA.categoryBitMask == PhysicsCategory.Fish) && (contact.bodyB.categoryBitMask == PhysicsCategory.WaterEdge)
-        {
-//            let fish = contact.bodyA.node as Fish
-//            fish.bounceFish()
-            
-        }
     }
     
     func fishHit (contact: SKPhysicsContact)
