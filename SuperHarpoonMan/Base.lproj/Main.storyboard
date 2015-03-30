@@ -78,8 +78,12 @@
                         </subviews>
                         <color key="backgroundColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
                     </view>
+                    <connections>
+                        <segue destination="nsb-d5-A4Y" kind="unwind" identifier="endGameSegue" unwindAction="unwindToTitleViewController:" id="lKn-Rh-kuR"/>
+                    </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="btX-cZ-eVz" sceneMemberID="firstResponder"/>
+                <exit id="nsb-d5-A4Y" userLabel="Exit" sceneMemberID="exit"/>
             </objects>
             <point key="canvasLocation" x="75.5" y="386.5"/>
         </scene>

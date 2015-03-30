@@ -22,9 +22,9 @@ struct PhysicsCategory {
 
 
 
+
 class GameScene: SKScene, SKPhysicsContactDelegate, UIGestureRecognizerDelegate {
-
-
+    
     var crosshairs: SKSpriteNode!
     
     var harpoon: Harpoon!
@@ -435,7 +435,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate, UIGestureRecognizerDelegate 
     func gameOver()
     {
         
-        println("the game is over!")
+        NSNotificationCenter.defaultCenter().postNotificationName(superHarpoonManGameIsOver, object: nil)
         
     }
     

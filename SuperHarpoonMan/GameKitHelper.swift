@@ -16,7 +16,6 @@ private let singletonInstance = GameKitHelper()
 class GameKitHelper: NSObject, GKGameCenterControllerDelegate
 {
     
-    
     var authenticationViewController: UIViewController!
     var lastError: NSError?
     var enableGameCenter: Bool = true
@@ -66,7 +65,7 @@ class GameKitHelper: NSObject, GKGameCenterControllerDelegate
         if GKLocalPlayer.localPlayer().authenticated
         {
             
-            var scoreReporter = GKScore(leaderboardIdentifier: "SJPSwiftrisHighScores")
+            var scoreReporter = GKScore(leaderboardIdentifier: "high_scores")
             scoreReporter.value = Int64(score)
             
             let scoreArray: [GKScore] = [scoreReporter]

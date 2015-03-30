@@ -9,6 +9,8 @@
 import UIKit
 import SpriteKit
 
+let superHarpoonManGameIsOver = "super_harpoon_man_game_is_over"
+
 extension SKNode {
     class func unarchiveFromFile(file : NSString) -> SKNode? {
         if let path = NSBundle.mainBundle().pathForResource(file, ofType: "sks") {
@@ -32,6 +34,8 @@ class GameViewController: UIViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        NSNotificationCenter.defaultCenter().addObserver(self, selector: "gameDidEnd", name:superHarpoonManGameIsOver, object: nil)
 
         gameScene = GameScene.unarchiveFromFile("GameScene") as? GameScene
             // Configure the view.
@@ -49,6 +53,27 @@ class GameViewController: UIViewController {
             gameView.presentScene(gameScene)
 
     }
+    
+    func gameDidEnd()
+    {
+        view.userInteractionEnabled = false
+        
+        
+        let endGameAlertViewController = UIAlertController(title: "Game Over!", message: "Congrats! You scored \(gameScene.score)", preferredStyle: UIAlertControllerStyle.Alert)
+        let endGameOKButton = UIAlertAction(title: "OK", style: UIAlertActionStyle.Default) { (action) in
+            
+            self.performSegueWithIdentifier("endGameSegue", sender: self)
+            self.dismissViewControllerAnimated(true, completion: nil)
+            
+        }
+        
+        endGameAlertViewController.addAction(endGameOKButton)
+        
+        presentViewController(endGameAlertViewController, animated: true, completion: nil)
+        
+        
+        
+    }
 
     @IBAction func gameDidPause(sender: UIButton) {
         
@@ -63,7 +88,7 @@ class GameViewController: UIViewController {
         }
         else
         {
-            //GameKitHelper.sharedInstance.saveToLeaderboard(swiftris.score)
+            GameKitHelper.sharedInstance.saveToLeaderboard(gameScene.score)
             dismissViewControllerAnimated(false, completion: nil)
         }
         

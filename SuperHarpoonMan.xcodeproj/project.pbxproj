@@ -394,7 +394,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				INFOPLIST_FILE = SuperHarpoonMan/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
-				PRODUCT_NAME = "$(TARGET_NAME)";
+				PRODUCT_NAME = SuperHarpoonMan;
 			};
 			name = Debug;
 		};
@@ -404,7 +404,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				INFOPLIST_FILE = SuperHarpoonMan/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
-				PRODUCT_NAME = "$(TARGET_NAME)";
+				PRODUCT_NAME = SuperHarpoonMan;
 			};
 			name = Release;
 		};
@@ -422,7 +422,7 @@
 				);
 				INFOPLIST_FILE = SuperHarpoonManTests/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
-				PRODUCT_NAME = "$(TARGET_NAME)";
+				PRODUCT_NAME = SuperHarpoonManTests;
 				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/SuperHarpoonMan.app/SuperHarpoonMan";
 			};
 			name = Debug;
@@ -437,7 +437,7 @@
 				);
 				INFOPLIST_FILE = SuperHarpoonManTests/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
-				PRODUCT_NAME = "$(TARGET_NAME)";
+				PRODUCT_NAME = SuperHarpoonManTests;
 				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/SuperHarpoonMan.app/SuperHarpoonMan";
 			};
 			name = Release;
