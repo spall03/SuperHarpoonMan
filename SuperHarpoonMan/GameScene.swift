@@ -21,9 +21,9 @@ struct PhysicsCategory {
 
 
 
+
 class GameScene: SKScene, SKPhysicsContactDelegate, UIGestureRecognizerDelegate {
-
-
+    
     var crosshairs: SKSpriteNode!
     
     var harpoon: Harpoon!
@@ -432,6 +432,14 @@ class GameScene: SKScene, SKPhysicsContactDelegate, UIGestureRecognizerDelegate 
     
     //MARK: Game Updaters
     
+    func pauseGame()
+    {
+        
+        println("game is paused!")
+        
+        
+    }
+    
     func updateLabels()
     {
         harpoonLabel.text = "Harpoons: \(harpoonsLeft)"
@@ -444,7 +452,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate, UIGestureRecognizerDelegate 
     func gameOver()
     {
         
-        println("the game is over!")
+        NSNotificationCenter.defaultCenter().postNotificationName(superHarpoonManGameIsOver, object: nil)
         
     }
         

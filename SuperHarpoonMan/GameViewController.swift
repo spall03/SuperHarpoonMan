@@ -9,6 +9,8 @@
 import UIKit
 import SpriteKit
 
+let superHarpoonManGameIsOver = "super_harpoon_man_game_is_over"
+
 extension SKNode {
     class func unarchiveFromFile(file : NSString) -> SKNode? {
         if let path = NSBundle.mainBundle().pathForResource(file, ofType: "sks") {
@@ -26,27 +28,78 @@ extension SKNode {
 }
 
 class GameViewController: UIViewController {
+    
+    var gameScene: GameScene!
+    var gameView: SKView!
 
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        NSNotificationCenter.defaultCenter().addObserver(self, selector: "gameDidEnd", name:superHarpoonManGameIsOver, object: nil)
 
-        if let scene = GameScene.unarchiveFromFile("GameScene") as? GameScene {
+        gameScene = GameScene.unarchiveFromFile("GameScene") as? GameScene
             // Configure the view.
             let skView = self.view as SKView
             skView.showsFPS = true
             skView.showsNodeCount = true
-            skView.showsFields = true
+            gameView = self.view as SKView
+            gameView.showsFPS = true
+            gameView.showsNodeCount = true
+            gameView.showsFields = true
+            
             /* Sprite Kit applies additional optimizations to improve rendering performance */
-            skView.ignoresSiblingOrder = true
+            gameView.ignoresSiblingOrder = true
             
             /* Set the scale mode to scale to fit the window */
-            scene.size = skView.bounds.size
-            scene.scaleMode = .AspectFill
+            gameScene.size = gameView.bounds.size
+            gameScene.scaleMode = .AspectFill
             
-            skView.presentScene(scene)
+            gameView.presentScene(gameScene)
+
+    }
+    
+    func gameDidEnd()
+    {
+        view.userInteractionEnabled = false
+        
+        
+        let endGameAlertViewController = UIAlertController(title: "Game Over!", message: "Congrats! You scored \(gameScene.score)", preferredStyle: UIAlertControllerStyle.Alert)
+        let endGameOKButton = UIAlertAction(title: "OK", style: UIAlertActionStyle.Default) { (action) in
+            
+            self.performSegueWithIdentifier("endGameSegue", sender: self)
+            self.dismissViewControllerAnimated(true, completion: nil)
+            
         }
+        
+        endGameAlertViewController.addAction(endGameOKButton)
+        
+        presentViewController(endGameAlertViewController, animated: true, completion: nil)
+        
+        
+        
     }
 
+    @IBAction func gameDidPause(sender: UIButton) {
+        
+        gameScene.paused = true
+    }
+    
+    @IBAction func unwindToGameViewController(segue: UIStoryboardSegue)
+    {
+        if segue.identifier == "gameResumeSegue"
+        {
+            gameScene.paused = false
+        }
+        else
+        {
+            GameKitHelper.sharedInstance.saveToLeaderboard(gameScene.score)
+            dismissViewControllerAnimated(false, completion: nil)
+        }
+        
+        
+    }
+    
+    
     override func shouldAutorotate() -> Bool {
         return true
     }
