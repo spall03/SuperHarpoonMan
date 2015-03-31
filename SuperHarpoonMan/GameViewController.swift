@@ -62,6 +62,7 @@ class GameViewController: UIViewController {
         let endGameAlertViewController = UIAlertController(title: "Game Over!", message: "Congrats! You scored \(gameScene.score)", preferredStyle: UIAlertControllerStyle.Alert)
         let endGameOKButton = UIAlertAction(title: "OK", style: UIAlertActionStyle.Default) { (action) in
             
+
             self.performSegueWithIdentifier("endGameSegue", sender: self)
             self.dismissViewControllerAnimated(true, completion: nil)
             

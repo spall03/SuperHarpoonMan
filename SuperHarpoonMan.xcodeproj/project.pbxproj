@@ -207,6 +207,7 @@
 				TargetAttributes = {
 					C69A2C101AB22BC20098F885 = {
 						CreatedOnToolsVersion = 6.2;
+						DevelopmentTeam = PQWCGM5H9E;
 					};
 					C69A2C291AB22BC30098F885 = {
 						CreatedOnToolsVersion = 6.2;
@@ -392,6 +393,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
 				INFOPLIST_FILE = SuperHarpoonMan/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_NAME = SuperHarpoonMan;
@@ -402,6 +404,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
 				INFOPLIST_FILE = SuperHarpoonMan/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_NAME = SuperHarpoonMan;

@@ -20,6 +20,12 @@ class TitleViewController: UIViewController
         GameKitHelper.sharedInstance.authenticateLocalPlayer()
     }
     
+    @IBAction func showHighScores()
+    {
+          GameKitHelper.sharedInstance.showLeaderboard(self)
+        
+    }
+    
     func showAuthenticationViewController()
     {
         
@@ -28,11 +34,7 @@ class TitleViewController: UIViewController
         
     }
     
-    @IBAction func showHighScores(sender: UIButton) {
-        
-        GameKitHelper.sharedInstance.showLeaderboard(self)
-        
-    }
+
     
     @IBAction func unwindToTitleViewController(segue: UIStoryboardSegue)
     {

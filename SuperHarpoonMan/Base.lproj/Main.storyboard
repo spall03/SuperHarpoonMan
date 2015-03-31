@@ -7,7 +7,7 @@
         <!--Title View Controller-->
         <scene sceneID="YTa-2z-MOh">
             <objects>
-                <viewController id="aFt-gs-aJb" userLabel="Title View Controller" sceneMemberID="viewController">
+                <viewController id="aFt-gs-aJb" userLabel="Title View Controller" customClass="TitleViewController" customModule="SuperHarpoonMan" customModuleProvider="target" sceneMemberID="viewController">
                     <layoutGuides>
                         <viewControllerLayoutGuide type="top" id="5uQ-qO-zzd"/>
                         <viewControllerLayoutGuide type="bottom" id="5D1-e5-Ojc"/>
@@ -34,6 +34,9 @@
                                 <state key="normal" title="High Scores">
                                     <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
                                 </state>
+                                <connections>
+                                    <action selector="showHighScores" destination="aFt-gs-aJb" eventType="touchUpInside" id="eop-YL-Lny"/>
+                                </connections>
                             </button>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Main Menu" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="fWf-jm-Ldn">
                                 <rect key="frame" x="83" y="147" width="209" height="75"/>

@@ -296,7 +296,6 @@ class GameScene: SKScene, SKPhysicsContactDelegate, UIGestureRecognizerDelegate 
         })
         
         
-        
         throwScore = 0 //reset score counter for next throw
         
         killHarpoon()
@@ -415,6 +414,19 @@ class GameScene: SKScene, SKPhysicsContactDelegate, UIGestureRecognizerDelegate 
     
     //MARK: Game Updaters
     
+    func achievementCheck()
+    {
+        
+        if score >= 100
+        {
+            GameKitHelper.sharedInstance.reportAchievement("shm_score_100_points", percentComplete: 100.0)
+        }
+        
+        
+        
+        
+    }
+    
     func pauseGame()
     {
         
@@ -435,6 +447,9 @@ class GameScene: SKScene, SKPhysicsContactDelegate, UIGestureRecognizerDelegate 
     func gameOver()
     {
         
+        achievementCheck()
+        
+        GameKitHelper.sharedInstance.saveToLeaderboard(score)
         NSNotificationCenter.defaultCenter().postNotificationName(superHarpoonManGameIsOver, object: nil)
         
     }
