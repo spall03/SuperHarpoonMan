@@ -16,6 +16,7 @@ struct PhysicsCategory {
     static let Water     : UInt32 = 0b11      // 3
     static let Sky       : UInt32 = 0b100     // 4
     static let Fish      : UInt32 = 0b101     // 5
+    static let Edge      : UInt32 = 0b110     // 6
 }
 
 
@@ -115,7 +116,8 @@ class GameScene: SKScene, SKPhysicsContactDelegate, UIGestureRecognizerDelegate 
     {
         
         self.physicsWorld.contactDelegate = self
-        self.physicsBody = SKPhysicsBody(edgeLoopFromRect: self.frame)
+        self.physicsBody = SKPhysicsBody(edgeLoopFromRect: CGRectInset( self.frame, 30.0, 30.0)) // Inset to show the boundaries
+        self.physicsBody?.collisionBitMask = PhysicsCategory.Edge
         
         self.view?.showsPhysics = true;
         self.view?.showsFields = true;
@@ -151,30 +153,16 @@ class GameScene: SKScene, SKPhysicsContactDelegate, UIGestureRecognizerDelegate 
         
         //fill up with a certain number of points' worth of fish
         // Change this to true to test out the bounce with just one fish, centered in the view
-        let DEMO_MODE_FOR_DEBUGGING_BOUNCE = false
-        if ( DEMO_MODE_FOR_DEBUGGING_BOUNCE )
+        //            while counter < (4 * extraHarpoonThreshold)
+        while counter < (numberOfFish)
         {
-            let newFish = RedFish()
+            let newFish = pickRandomFish()
             self.addChild(newFish)
-            newFish.setupFish(true)
+            newFish.setupFish()
             newFish.moveFish()
             
-            counter += newFish.pointValue
+            counter++ // was += newFish.pointValue
             fishCounter++
-        }
-        else
-        {
-//            while counter < (4 * extraHarpoonThreshold)
-            while counter < (numberOfFish)
-            {
-                let newFish = pickRandomFish()
-                self.addChild(newFish)
-                newFish.setupFish()
-                newFish.moveFish()
-                
-                counter += newFish.pointValue
-                fishCounter++
-            }
         }
     }
     
@@ -402,6 +390,12 @@ class GameScene: SKScene, SKPhysicsContactDelegate, UIGestureRecognizerDelegate 
             betweenHarpoonThrows()
         }
         
+        if ( contact.bodyA.collisionBitMask == PhysicsCategory.Edge && contact.bodyB.categoryBitMask == PhysicsCategory.Fish )
+        {
+            println("Contact between \(contact.bodyA) and \(contact.bodyB) ended");
+            var bouncedFish = contact.bodyB.node as Fish
+            bouncedFish.bounceFish() // bounceFish TBI
+        }
     }
     
     func fishHit (contact: SKPhysicsContact)

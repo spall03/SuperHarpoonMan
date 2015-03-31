@@ -126,6 +126,12 @@ class Fish: SKSpriteNode
         })
     }
     
+    func bounceFish()
+    {
+        swimVector = CGVector(dx: -(swimVector.dx), dy: -(swimVector.dy))
+        self.physicsBody!.applyImpulse( swimVector )
+    }
+    
     func killFish() -> Int
     {
         
