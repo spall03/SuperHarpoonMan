@@ -40,8 +40,12 @@ class Fish: SKSpriteNode
         
     }
     
-    
     func setupFish()
+    {
+        setupFish(false)
+    }
+    
+    func setupFish(isDemo: Bool)
     {
 
         let screenWidth = self.scene?.view?.frame.width
@@ -49,10 +53,17 @@ class Fish: SKSpriteNode
         let midScreen = CGPointMake(screenWidth! / 2, screenHeight! / 2)
        
         //assign the fish a random starting position in the water
-        
-        self.position.x = random(midScreen.x - 150, max: midScreen.x + 150)
-        self.position.y = random(midScreen.y, max: startingDepthMax)
-    
+        if ( isDemo )
+        {
+            self.position.x = midScreen.x
+            self.position.y = midScreen.y
+        }
+        else
+        {
+            self.position.x = random(midScreen.x - 150, max: midScreen.x + 150)
+            self.position.y = random((midScreen.y), max: startingDepthMax)
+            println("\(self) - YPos:\(self.position.y)")
+        }
         
         //define the fish's movement range
         horizontalRange = SKRange(lowerLimit: 0, upperLimit: 375)
@@ -65,15 +76,16 @@ class Fish: SKSpriteNode
         self.physicsBody = SKPhysicsBody(rectangleOfSize: self.size)
         self.physicsBody!.dynamic = true
         self.physicsBody!.pinned = false
+        self.physicsBody!.mass = 5.0
+        self.physicsBody!.restitution = 1.0
         self.physicsBody!.affectedByGravity = false
         self.physicsBody!.allowsRotation = false
+        self.physicsBody!.usesPreciseCollisionDetection = true; // This is a small, fast body
         
         //set up fish collision detection
         self.physicsBody!.categoryBitMask = PhysicsCategory.Fish
         self.physicsBody!.collisionBitMask = PhysicsCategory.None
-        self.physicsBody!.contactTestBitMask = PhysicsCategory.HarpoonTip | PhysicsCategory.WaterEdge
-        
-        
+        self.physicsBody!.contactTestBitMask = PhysicsCategory.HarpoonTip
     }
     
     func moveFish()
@@ -105,55 +117,19 @@ class Fish: SKSpriteNode
         
         swimVector = CGVector(dx: dx, dy: dy) //keep track of the fish's vector so we can change it if it bangs into the side of the water
         
-        var movement = SKAction.moveBy(swimVector, duration: duration)
-        
-//        self.physicsBody?.applyImpulse(swimVector)
-        self.runAction(movement, completion: { () -> Void in
-            var wait = SKAction.waitForDuration(NSTimeInterval(self.random(self.minPauseDuration, max: self.maxPauseDuration)))
-            
-            self.runAction(wait, completion: { () -> Void in
-                self.moveFish()
-            })
-            
+        self.physicsBody!.applyImpulse( swimVector )
+
+        // Just keep swimming...
+        var wait = SKAction.waitForDuration(NSTimeInterval( random(self.minPauseDuration, max:self.maxPauseDuration)))
+        self.runAction(wait, completion: { () -> Void in
+            self.moveFish()
         })
-        
     }
     
     func bounceFish()
     {
-        
-        println("bounce")
-        
-        //figure out the edge the fish has gone off of
-//        if (self.position.x < -self.size.width/2.0)
-//        {
-//            
-//            
-//        }
-//        else if
-//        {
-//        
-//        
-//        
-//        }
-//        else if
-//        {
-//        
-//        
-//        }
-//        else
-//        {
-//            
-//            
-//        }
-//        
-//        || thisFish.position.x > self.view!.frame.width + thisFish.size.width/2.0
-//        || thisFish.position.y < -thisFish.size.height/2.0 || thisFish.position.y > self.size.height + thisFish.size.height/2.0)
-        
-        
-        //reflect the vector accordingly
-        
-        
+        swimVector = CGVector(dx: -(swimVector.dx), dy: -(swimVector.dy))
+        self.physicsBody!.applyImpulse( swimVector )
     }
     
     func killFish() -> Int

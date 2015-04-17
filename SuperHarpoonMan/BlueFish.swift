@@ -14,7 +14,7 @@ class BlueFish: Fish
     
     convenience init()
     {
-        self.init(texture: nil, color: UIColor.blueColor(), size: CGSizeMake(100.0, 30.0))
+        self.init(texture: nil, color: UIColor.blueColor(), size: CGSizeMake(100.0, 35.0))
         pointValue = 20
         
         startingDepthMax = 200
