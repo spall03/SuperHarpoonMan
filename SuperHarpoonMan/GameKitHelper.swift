@@ -31,7 +31,7 @@ class GameKitHelper: NSObject, GKGameCenterControllerDelegate
         
         let localPlayer = GKLocalPlayer.localPlayer()
         
-        localPlayer.authenticateHandler = {(vc:UIViewController!, error:NSError?) -> Void in
+        localPlayer.authenticateHandler = {(vc:UIViewController?, error:NSError?) -> Void in
             
             self.lastError = error
             
@@ -65,16 +65,16 @@ class GameKitHelper: NSObject, GKGameCenterControllerDelegate
         if GKLocalPlayer.localPlayer().authenticated
         {
             
-            var scoreReporter = GKScore(leaderboardIdentifier: "high_scores")
+            let scoreReporter = GKScore(leaderboardIdentifier: "high_scores")
             scoreReporter.value = Int64(score)
             
             let scoreArray: [GKScore] = [scoreReporter]
             
-            GKScore.reportScores(scoreArray, withCompletionHandler: { (error: NSError!) -> Void in
+            GKScore.reportScores(scoreArray, withCompletionHandler: { (error: NSError?) -> Void in
                 
                 if error != nil
                 {
-                        print("Score upload to Game Center didn't work.")
+                        print("Score upload to Game Center didn't work.", terminator: "")
                 }
             })
             
@@ -94,10 +94,10 @@ class GameKitHelper: NSObject, GKGameCenterControllerDelegate
             
             let achievementArray: [GKAchievement] = [achievement]
             
-            GKAchievement.reportAchievements(achievementArray, withCompletionHandler: { (error:NSError!) -> Void in
+            GKAchievement.reportAchievements(achievementArray, withCompletionHandler: { (error:NSError?) -> Void in
                 if error != nil
                 {
-                    print("Achievement upload to Game Center didn't work.")
+                    print("Achievement upload to Game Center didn't work.", terminator: "")
                 }
             })
        
@@ -114,7 +114,7 @@ class GameKitHelper: NSObject, GKGameCenterControllerDelegate
         viewController.presentViewController(gameCenterViewController, animated: true, completion: nil)
     }
     
-    func gameCenterViewControllerDidFinish(gameCenterViewController: GKGameCenterViewController!)
+    func gameCenterViewControllerDidFinish(gameCenterViewController: GKGameCenterViewController)
     {
         gameCenterViewController.dismissViewControllerAnimated(true, completion: nil)
     }

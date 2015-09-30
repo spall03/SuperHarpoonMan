@@ -33,7 +33,7 @@ class Fish: SKSpriteNode
     var horizontalRange: SKRange!
     var verticalRange: SKRange!
     
-    override init(texture: SKTexture!, color: UIColor!, size: CGSize)
+    override init(texture: SKTexture?, color: UIColor, size: CGSize)
     {
         super.init(texture: texture, color: color, size: size)
         self.name = "fish"
@@ -78,7 +78,7 @@ class Fish: SKSpriteNode
     
     func moveFish()
     {
-        var duration = NSTimeInterval(random(minVectorDuration, max: maxVectorDuration))
+        let duration = NSTimeInterval(random(minVectorDuration, max: maxVectorDuration))
         var dx = random((-horizontalMaxVector), max: (horizontalMaxVector))
         var dy = random((-verticalMaxVector), max: (verticalMaxVector))
         
@@ -105,11 +105,11 @@ class Fish: SKSpriteNode
         
         swimVector = CGVector(dx: dx, dy: dy) //keep track of the fish's vector so we can change it if it bangs into the side of the water
         
-        var movement = SKAction.moveBy(swimVector, duration: duration)
+        let movement = SKAction.moveBy(swimVector, duration: duration)
         
 //        self.physicsBody?.applyImpulse(swimVector)
         self.runAction(movement, completion: { () -> Void in
-            var wait = SKAction.waitForDuration(NSTimeInterval(self.random(self.minPauseDuration, max: self.maxPauseDuration)))
+            let wait = SKAction.waitForDuration(NSTimeInterval(self.random(self.minPauseDuration, max: self.maxPauseDuration)))
             
             self.runAction(wait, completion: { () -> Void in
                 self.moveFish()
@@ -122,7 +122,7 @@ class Fish: SKSpriteNode
     func bounceFish()
     {
         
-        println("bounce")
+        print("bounce")
         
         //figure out the edge the fish has gone off of
 //        if (self.position.x < -self.size.width/2.0)
@@ -171,7 +171,7 @@ class Fish: SKSpriteNode
         
         var newFish: Fish!
         
-        var r = randomInt(1, upper: 100)
+        let r = randomInt(1, upper: 100)
         
         if (level >= 1 && level <= 3)
         {
@@ -245,7 +245,7 @@ class Fish: SKSpriteNode
     }
     
     func randomInt (lower: Int , upper: Int) -> Int {
-        return lower + Int(arc4random_uniform(upper - lower + 1))
+        return lower + Int(arc4random_uniform(UInt32(upper - lower + 1)))
     }
     
     func random() -> CGFloat {
