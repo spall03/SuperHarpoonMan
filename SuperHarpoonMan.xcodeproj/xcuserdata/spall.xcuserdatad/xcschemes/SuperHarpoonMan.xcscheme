@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Scheme
-   LastUpgradeVersion = "0620"
+   LastUpgradeVersion = "0700"
    version = "1.3">
    <BuildAction
       parallelizeBuildables = "YES"
@@ -15,7 +15,7 @@
             <BuildableReference
                BuildableIdentifier = "primary"
                BlueprintIdentifier = "C69A2C101AB22BC20098F885"
-               BuildableName = "HarpoonLagoon.app"
+               BuildableName = "SuperHarpoonMan.app"
                BlueprintName = "SuperHarpoonMan"
                ReferencedContainer = "container:SuperHarpoonMan.xcodeproj">
             </BuildableReference>
@@ -29,7 +29,7 @@
             <BuildableReference
                BuildableIdentifier = "primary"
                BlueprintIdentifier = "C69A2C291AB22BC30098F885"
-               BuildableName = "HarpoonLagoonTests.xctest"
+               BuildableName = "SuperHarpoonManTests.xctest"
                BlueprintName = "SuperHarpoonManTests"
                ReferencedContainer = "container:SuperHarpoonMan.xcodeproj">
             </BuildableReference>
@@ -37,17 +37,17 @@
       </BuildActionEntries>
    </BuildAction>
    <TestAction
+      buildConfiguration = "Debug"
       selectedDebuggerIdentifier = "Xcode.DebuggerFoundation.Debugger.LLDB"
       selectedLauncherIdentifier = "Xcode.DebuggerFoundation.Launcher.LLDB"
-      shouldUseLaunchSchemeArgsEnv = "YES"
-      buildConfiguration = "Debug">
+      shouldUseLaunchSchemeArgsEnv = "YES">
       <Testables>
          <TestableReference
             skipped = "NO">
             <BuildableReference
                BuildableIdentifier = "primary"
                BlueprintIdentifier = "C69A2C291AB22BC30098F885"
-               BuildableName = "HarpoonLagoonTests.xctest"
+               BuildableName = "SuperHarpoonManTests.xctest"
                BlueprintName = "SuperHarpoonManTests"
                ReferencedContainer = "container:SuperHarpoonMan.xcodeproj">
             </BuildableReference>
@@ -57,27 +57,30 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "C69A2C101AB22BC20098F885"
-            BuildableName = "HarpoonLagoon.app"
+            BuildableName = "SuperHarpoonMan.app"
             BlueprintName = "SuperHarpoonMan"
             ReferencedContainer = "container:SuperHarpoonMan.xcodeproj">
          </BuildableReference>
       </MacroExpansion>
+      <AdditionalOptions>
+      </AdditionalOptions>
    </TestAction>
    <LaunchAction
+      buildConfiguration = "Debug"
       selectedDebuggerIdentifier = "Xcode.DebuggerFoundation.Debugger.LLDB"
       selectedLauncherIdentifier = "Xcode.DebuggerFoundation.Launcher.LLDB"
       launchStyle = "0"
       useCustomWorkingDirectory = "NO"
-      buildConfiguration = "Debug"
       ignoresPersistentStateOnLaunch = "NO"
       debugDocumentVersioning = "YES"
+      debugServiceExtension = "internal"
       allowLocationSimulation = "YES">
       <BuildableProductRunnable
          runnableDebuggingMode = "0">
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "C69A2C101AB22BC20098F885"
-            BuildableName = "HarpoonLagoon.app"
+            BuildableName = "SuperHarpoonMan.app"
             BlueprintName = "SuperHarpoonMan"
             ReferencedContainer = "container:SuperHarpoonMan.xcodeproj">
          </BuildableReference>
@@ -86,17 +89,17 @@
       </AdditionalOptions>
    </LaunchAction>
    <ProfileAction
+      buildConfiguration = "Release"
       shouldUseLaunchSchemeArgsEnv = "YES"
       savedToolIdentifier = ""
       useCustomWorkingDirectory = "NO"
-      buildConfiguration = "Release"
       debugDocumentVersioning = "YES">
       <BuildableProductRunnable
          runnableDebuggingMode = "0">
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "C69A2C101AB22BC20098F885"
-            BuildableName = "HarpoonLagoon.app"
+            BuildableName = "SuperHarpoonMan.app"
             BlueprintName = "SuperHarpoonMan"
             ReferencedContainer = "container:SuperHarpoonMan.xcodeproj">
          </BuildableReference>
